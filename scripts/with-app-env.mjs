@@ -88,6 +88,19 @@ export function projectRoot() {
 }
 
 /**
+ * Spawn options for the wrapped command.
+ *
+ * On Windows, `npm run` puts `node_modules/.bin` on PATH, but the Vite bin is
+ * `vite.cmd`. `child_process.spawn` does not apply PATHEXT, so a bare `vite`
+ * fails with ENOENT in PowerShell and VS Code. A shell resolves `.cmd`.
+ * Unix is unchanged: no shell, so signals and argv stay exact.
+ */
+export function spawnOptions(platform = process.platform) {
+  if (platform === "win32") return { shell: true, windowsHide: true };
+  return { shell: false };
+}
+
+/**
  * Whether `moduleUrl` is the script node was asked to run.
  *
  * Both sides are resolved through symlinks: node realpaths `import.meta.url`
@@ -111,7 +124,11 @@ function main(argv) {
     process.exit(2);
   }
   const env = mergeAppEnv(readAppEnv(projectRoot()), process.env);
-  const child = spawn(command, args, { stdio: "inherit", env });
+  const child = spawn(command, args, {
+    stdio: "inherit",
+    env,
+    ...spawnOptions(process.platform),
+  });
   // The dev server is long-running and is stopped by signalling this wrapper.
   for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) {
     process.on(signal, () => child.kill(signal));

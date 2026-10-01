@@ -43,29 +43,7 @@ Then open [http://localhost:8080](http://localhost:8080).
 
 The server keeps running until you stop it with `Ctrl+C`. Save a file and the page reloads.
 
-### Windows: `spawn vite ENOENT`
-
-PowerShell can fail with:
-
-```text
-[with-app-env] failed to run vite: spawn vite ENOENT
-```
-
-Node cannot find the `vite.cmd` shim. Start Vite through `node` instead. Same app, same port:
-
-**PowerShell**
-
-```powershell
-node scripts/with-app-env.mjs node .\node_modules\vite\bin\vite.js dev --host 127.0.0.1 --port 8080
-```
-
-**Command Prompt**
-
-```bat
-node scripts/with-app-env.mjs node .\node_modules\vite\bin\vite.js dev --host 127.0.0.1 --port 8080
-```
-
-If port 8080 is already taken, stop the other process or close the previous terminal, then run the command again.
+`npm run dev`, `npm run build`, and `npm run preview` start Vite through Node (`node_modules/vite/bin/vite.js`). That works in PowerShell. A bare `vite` fails there with `spawn vite ENOENT`, because Windows only has `vite.cmd` and Node does not resolve that extension unless a shell is used.
 
 ## Production build
 
@@ -75,11 +53,20 @@ npm run build
 
 That type-checks the client bundle via Vite and writes output under `.output/` (Nitro / Vercel preset). Without `DATABASE_URL` the migrate step prints a skip line and exits 0. That is expected locally.
 
-**Windows, if `npm run build` hits the same `spawn vite ENOENT` error:**
+If this folder still has the old `package.json` (`with-app-env.mjs vite build`) you will see the error in your screenshot. Either replace `package.json` and `scripts/with-app-env.mjs` from this copy, or run the build directly in PowerShell:
 
 ```powershell
 node scripts/with-app-env.mjs node .\node_modules\vite\bin\vite.js build
+npm run db:migrate
 ```
+
+Dev server, same situation:
+
+```powershell
+node scripts/with-app-env.mjs node .\node_modules\vite\bin\vite.js dev --host 127.0.0.1 --port 8080
+```
+
+If port 8080 is already taken, stop the other terminal and run it again.
 
 ## Preview the build
 
@@ -91,7 +78,7 @@ npm run preview
 
 Open [http://127.0.0.1:8081](http://127.0.0.1:8081). Dev stays on port **8080**; the built preview stays on port **8081**.
 
-**Windows workaround:**
+Old `package.json` only, in PowerShell:
 
 ```powershell
 node scripts/with-app-env.mjs node .\node_modules\vite\bin\vite.js preview --host 127.0.0.1 --port 8081

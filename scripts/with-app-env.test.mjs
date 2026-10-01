@@ -11,6 +11,7 @@ import {
   parseAppEnv,
   projectRoot,
   readAppEnv,
+  spawnOptions,
 } from "./with-app-env.mjs";
 
 const execFileAsync = promisify(execFile);
@@ -71,6 +72,12 @@ test("vite loadEnv resolves the wrapped value", () => {
   const root = makeWorkspace('{"VITE_AUTH_ENABLED":"false"}');
   const merged = mergeAppEnv(readAppEnv(root), { PATH: "/usr/bin" });
   assert.equal(merged.VITE_AUTH_ENABLED, "false");
+});
+
+test("windows spawn uses a shell so vite.cmd resolves", () => {
+  assert.equal(spawnOptions("win32").shell, true);
+  assert.equal(spawnOptions("linux").shell, false);
+  assert.equal(spawnOptions("darwin").shell, false);
 });
 
 test("the wrapped command runs with the app env applied", async () => {
