@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #100c0b;
+  --color-panel: #1c1411;
+  --color-felt: #146348;
+  --color-felt-deep: #0c3328;
+  --color-gold: #e0b15c;
+  --color-gold-dim: #8c6d32;
+  --color-ivory: #f6efe3;
+  --color-mute: #b3a394;
+  --color-crimson: #9c2b2b;
+  --color-line: #3a2e26;
+  --color-bg: #100c0b;
+  --color-fg: #f6efe3;
+  --color-surface: #1c1411;
+  --color-muted: #b3a394;
+  --color-stroke: #3a2e26;
+  --color-accent: #e0b15c;
+  --color-accent-ink: #100c0b;
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-sans: "Outfit", system-ui, sans-serif;
+  --radius-card: 0.9rem;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    font-family: var(--font-display);
+  }
+  p {
+    text-wrap: pretty;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  button:focus-visible,
+  a:focus-visible,
+  [role="radio"]:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-ink);
+  }
+}
+
+@layer components {
+  .felt-surface {
+    background-color: var(--color-felt);
+    background-image: radial-gradient(
+      ellipse at 50% 0%,
+      color-mix(in oklab, var(--color-ivory) 14%, transparent),
+      transparent 62%
+    );
+    color: var(--color-ivory);
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+  .pcard {
+    width: 4.15rem;
+    height: 5.85rem;
+  }
+  .pcard-sm {
+    width: 2.55rem;
+    height: 3.55rem;
+  }
+  .pcard-sm .pcard-rank {
+    font-size: 0.8rem;
+  }
+  .pcard-sm .pcard-pip {
+    width: 0.7rem;
+    height: 0.7rem;
+  }
+  .pcard-sm .pcard-suit {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+  @media (min-width: 768px) {
+    .pcard:not(.pcard-sm) {
+      width: 4.75rem;
+      height: 6.6rem;
+    }
+    .pcard-sm {
+      width: 3.05rem;
+      height: 4.25rem;
+    }
+  }
+  @media (max-width: 420px) {
+    .pcard:not(.pcard-sm) {
+      width: 3.7rem;
+      height: 5.2rem;
+    }
+    .pcard-sm {
+      width: 2.35rem;
+      height: 3.3rem;
+    }
+  }
+}
+
+html[data-theme="light"] {
+  --color-bg: #f4efe6;
+  --color-fg: #1b140f;
+  --color-surface: #fffaf3;
+  --color-muted: #5c4c41;
+  --color-stroke: #d9cbbd;
+  --color-accent: #8a5a12;
+  --color-accent-ink: #fffaf3;
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

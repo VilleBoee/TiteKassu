@@ -1,0 +1,578 @@
+import { i as __toESM } from "../_runtime.mjs";
+import { J as require_react, S as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
+import { i as playCue, n as BrokeRack, o as useHouse, r as HouseShell, s as useI18n } from "./shell-CswMBeV8.mjs";
+import { a as PlayingCard, c as freshShoe, h as useReducedMotion, l as handTotal, n as GhostButton, o as ResultLine, r as GoldButton, s as RuleNote, t as DenomPicker, u as isBlackjack } from "./use-reduced-motion-CGmAgD2K.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/blackjack-CZbSKP4g.js
+var import_react = /* @__PURE__ */ __toESM(require_react());
+var import_jsx_runtime = require_jsx_runtime();
+function createTable() {
+	return {
+		shoe: [],
+		dealer: [],
+		hands: [],
+		active: 0,
+		phase: "bet",
+		baseBet: 0,
+		insuranceBet: 0,
+		settlement: null
+	};
+}
+function clearHand(table) {
+	return {
+		...table,
+		phase: "bet",
+		hands: [],
+		dealer: [],
+		active: 0,
+		baseBet: 0,
+		insuranceBet: 0,
+		settlement: null
+	};
+}
+function drawOne(shoe) {
+	const source = shoe.length === 0 ? freshShoe() : shoe;
+	return {
+		card: source[0],
+		shoe: source.slice(1)
+	};
+}
+function replace(hands, index, hand) {
+	return hands.map((h, i) => i === index ? hand : h);
+}
+function dealerShouldHit(cards) {
+	return handTotal(cards).total < 17;
+}
+function canHit(table) {
+	if (table.phase !== "player") return false;
+	const hand = table.hands[table.active];
+	if (!hand || hand.stood || hand.splitAce) return false;
+	return handTotal(hand.cards).total < 21;
+}
+function canStand(table) {
+	return table.phase === "player" && !!table.hands[table.active] && !table.hands[table.active].stood;
+}
+function canDouble(table) {
+	if (table.phase !== "player") return false;
+	const hand = table.hands[table.active];
+	return !!hand && hand.cards.length === 2 && !hand.splitAce && !hand.stood;
+}
+function canSplit(table) {
+	if (table.phase !== "player" || table.hands.length !== 1) return false;
+	const hand = table.hands[0];
+	if (!hand || hand.cards.length !== 2 || hand.wasSplit) return false;
+	return hand.cards[0].r === hand.cards[1].r;
+}
+function advance(table) {
+	const hand = table.hands[table.active];
+	if (!hand) return playDealer(table);
+	if (!hand.stood && handTotal(hand.cards).total < 21) return table;
+	const hands = replace(table.hands, table.active, {
+		...hand,
+		stood: true
+	});
+	const nextIndex = hands.findIndex((h, i) => i > table.active && !h.stood);
+	if (nextIndex >= 0) return {
+		...table,
+		hands,
+		active: nextIndex
+	};
+	return playDealer({
+		...table,
+		hands
+	});
+}
+function playDealer(table) {
+	const anyLive = table.hands.some((h) => handTotal(h.cards).total <= 21);
+	let shoe = table.shoe;
+	let dealer = table.dealer.slice();
+	if (anyLive) while (dealerShouldHit(dealer)) {
+		const drawn = drawOne(shoe);
+		dealer = [...dealer, drawn.card];
+		shoe = drawn.shoe;
+	}
+	return settle({
+		...table,
+		shoe,
+		dealer,
+		phase: "done",
+		active: -1
+	});
+}
+function settle(table) {
+	const dealerTotal = handTotal(table.dealer).total;
+	const dealerBJ = isBlackjack(table.dealer);
+	const dealerBust = dealerTotal > 21;
+	let mainReturn = 0;
+	const parts = [];
+	table.hands.forEach((hand, index) => {
+		const total = handTotal(hand.cards).total;
+		const natural = isBlackjack(hand.cards) && !hand.wasSplit;
+		const prefix = table.hands.length > 1 ? index === 0 ? "Left " : "Right " : "";
+		if (total > 21) {
+			parts.push(prefix ? `${prefix}bust` : "You bust");
+			return;
+		}
+		if (natural && dealerBJ) {
+			mainReturn += hand.bet;
+			parts.push(prefix ? `${prefix}push` : "Push");
+			return;
+		}
+		if (natural) {
+			mainReturn += hand.bet + Math.round(hand.bet * 3 / 2);
+			parts.push(prefix ? `${prefix}blackjack` : "Blackjack");
+			return;
+		}
+		if (dealerBJ) {
+			parts.push(prefix ? `${prefix}loses to a blackjack` : "You lose to a blackjack");
+			return;
+		}
+		if (dealerBust || total > dealerTotal) {
+			mainReturn += hand.bet * 2;
+			parts.push(!prefix && dealerBust ? "Dealer busts. You win" : prefix ? `${prefix}wins` : "You win");
+			return;
+		}
+		if (total === dealerTotal) {
+			mainReturn += hand.bet;
+			parts.push(prefix ? `${prefix}push` : "Push");
+			return;
+		}
+		parts.push(prefix ? `${prefix}loses` : "You lose");
+	});
+	let insuranceReturn = 0;
+	if (table.insuranceBet > 0) {
+		if (dealerBJ) {
+			insuranceReturn = table.insuranceBet * 3;
+			parts.push("Insurance pays");
+		} else parts.push("Insurance loses");
+	}
+	const note = parts.map((part) => part.trim()).filter(Boolean).map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" · ");
+	return {
+		...table,
+		phase: "done",
+		active: -1,
+		settlement: {
+			mainReturn,
+			insuranceReturn,
+			note: note || "Settled"
+		}
+	};
+}
+function deal(table, bet) {
+	if (table.phase !== "bet" || bet <= 0) return table;
+	let shoe = table.shoe.length < 78 ? freshShoe() : table.shoe;
+	const take = () => {
+		const drawn = drawOne(shoe);
+		shoe = drawn.shoe;
+		return drawn.card;
+	};
+	const p1 = take();
+	const up = take();
+	const p2 = take();
+	const hole = take();
+	const hand = {
+		cards: [p1, p2],
+		bet,
+		stood: false,
+		doubled: false,
+		splitAce: false,
+		wasSplit: false
+	};
+	const dealer = [up, hole];
+	let phase = "player";
+	if (up.r === "A") phase = "insurance";
+	else if (isBlackjack(dealer) || isBlackjack([p1, p2])) phase = "done";
+	const next = {
+		shoe,
+		dealer,
+		hands: [hand],
+		active: 0,
+		phase,
+		baseBet: bet,
+		insuranceBet: 0,
+		settlement: null
+	};
+	return phase === "done" ? settle(next) : next;
+}
+function resolveInsurance(table, take) {
+	if (table.phase !== "insurance") return table;
+	const next = {
+		...table,
+		insuranceBet: take ? Math.floor(table.baseBet / 2) : 0,
+		phase: "player"
+	};
+	if (isBlackjack(next.dealer) || isBlackjack(next.hands[0].cards)) return settle(next);
+	return next;
+}
+function hit(table) {
+	if (!canHit(table)) return table;
+	const drawn = drawOne(table.shoe);
+	const hand = table.hands[table.active];
+	const cards = [...hand.cards, drawn.card];
+	const total = handTotal(cards).total;
+	const updated = {
+		...hand,
+		cards,
+		stood: total >= 21
+	};
+	return advance({
+		...table,
+		shoe: drawn.shoe,
+		hands: replace(table.hands, table.active, updated)
+	});
+}
+function stand(table) {
+	if (!canStand(table)) return table;
+	const hand = table.hands[table.active];
+	return advance({
+		...table,
+		hands: replace(table.hands, table.active, {
+			...hand,
+			stood: true
+		})
+	});
+}
+function doubleDown(table) {
+	if (!canDouble(table)) return table;
+	const drawn = drawOne(table.shoe);
+	const hand = table.hands[table.active];
+	const cards = [...hand.cards, drawn.card];
+	const updated = {
+		...hand,
+		cards,
+		bet: hand.bet * 2,
+		doubled: true,
+		stood: true
+	};
+	return advance({
+		...table,
+		shoe: drawn.shoe,
+		hands: replace(table.hands, table.active, updated)
+	});
+}
+function splitHand(table) {
+	if (!canSplit(table)) return table;
+	const hand = table.hands[0];
+	const leftDraw = drawOne(table.shoe);
+	const rightDraw = drawOne(leftDraw.shoe);
+	const ace = hand.cards[0].r === "A";
+	const leftTotal = handTotal([hand.cards[0], leftDraw.card]).total;
+	const rightTotal = handTotal([hand.cards[1], rightDraw.card]).total;
+	const left = {
+		cards: [hand.cards[0], leftDraw.card],
+		bet: hand.bet,
+		stood: ace || leftTotal >= 21,
+		doubled: false,
+		splitAce: ace,
+		wasSplit: true
+	};
+	const right = {
+		cards: [hand.cards[1], rightDraw.card],
+		bet: hand.bet,
+		stood: ace || rightTotal >= 21,
+		doubled: false,
+		splitAce: ace,
+		wasSplit: true
+	};
+	return advance({
+		...table,
+		shoe: rightDraw.shoe,
+		hands: [left, right],
+		active: 0
+	});
+}
+function insuranceCost(table) {
+	return Math.floor(table.baseBet / 2);
+}
+var DENOMS = [
+	10,
+	25,
+	100,
+	500
+];
+function BlackjackGame() {
+	const reduced = useReducedMotion();
+	const { t, fmt } = useI18n();
+	const chips = useHouse((s) => s.chips);
+	const [wager, setWager] = (0, import_react.useState)(25);
+	const [denom, setDenom] = (0, import_react.useState)(25);
+	const [table, setTable] = (0, import_react.useState)(() => createTable());
+	const [banner, setBanner] = (0, import_react.useState)("Place a bet.");
+	const [tone, setTone] = (0, import_react.useState)("idle");
+	const [shown, setShown] = (0, import_react.useState)(1);
+	const [busy, setBusy] = (0, import_react.useState)(false);
+	const tableRef = (0, import_react.useRef)(table);
+	const owed = (0, import_react.useRef)(null);
+	const timer = (0, import_react.useRef)(0);
+	const flush = (announce) => {
+		const due = owed.current;
+		if (!due) return;
+		owed.current = null;
+		window.clearInterval(timer.current);
+		useHouse.getState().settle("blackjack", due.stake, due.back, due.note);
+		if (!announce) return;
+		setBusy(false);
+		setBanner(due.note);
+		if (due.back > due.stake) {
+			setTone("win");
+			playCue("win");
+		} else if (due.back === due.stake) {
+			setTone("push");
+			playCue("tick");
+		} else {
+			setTone("lose");
+			playCue("lose");
+		}
+	};
+	(0, import_react.useEffect)(() => () => flush(false), []);
+	function present(next) {
+		tableRef.current = next;
+		setTable(next);
+		if (next.phase !== "done" || !next.settlement) {
+			setShown(1);
+			setBanner(next.phase === "insurance" ? "Insurance?" : "Your hand");
+			setTone("idle");
+			playCue("card");
+			return;
+		}
+		const stake = next.hands.reduce((sum, hand) => sum + hand.bet, 0) + next.insuranceBet;
+		const back = next.settlement.mainReturn + next.settlement.insuranceReturn;
+		owed.current = {
+			stake,
+			back,
+			note: next.settlement.note
+		};
+		const count = next.dealer.length;
+		if (reduced || count <= 2) {
+			setShown(count);
+			flush(true);
+			return;
+		}
+		setBusy(true);
+		setShown(2);
+		setBanner("Dealer plays");
+		setTone("idle");
+		playCue("card");
+		let n = 2;
+		timer.current = window.setInterval(() => {
+			n += 1;
+			setShown(n);
+			playCue("tick");
+			if (n >= count) flush(true);
+		}, 420);
+	}
+	function onDeal(amount = wager) {
+		if (busy) return;
+		const ready = tableRef.current.phase === "done" ? clearHand(tableRef.current) : tableRef.current;
+		if (ready.phase !== "bet") return;
+		if (!useHouse.getState().stake(amount)) return;
+		present(deal(ready, amount));
+	}
+	function act(kind) {
+		if (busy) return;
+		const prev = tableRef.current;
+		if (kind === "double") {
+			const extra = prev.hands[prev.active]?.bet ?? 0;
+			if (!canDouble(prev) || !useHouse.getState().stake(extra)) return;
+			const next = doubleDown(prev);
+			if (next === prev) {
+				useHouse.getState().refund(extra);
+				return;
+			}
+			present(next);
+			return;
+		}
+		if (kind === "split") {
+			const extra = prev.hands[0]?.bet ?? 0;
+			if (!canSplit(prev) || !useHouse.getState().stake(extra)) return;
+			const next = splitHand(prev);
+			if (next === prev) {
+				useHouse.getState().refund(extra);
+				return;
+			}
+			present(next);
+			return;
+		}
+		const next = kind === "hit" ? hit(prev) : stand(prev);
+		if (next === prev) return;
+		present(next);
+	}
+	function insure(take) {
+		if (busy) return;
+		const prev = tableRef.current;
+		const cost = insuranceCost(prev);
+		if (take && !useHouse.getState().stake(cost)) return;
+		const next = resolveInsurance(prev, take);
+		if (next === prev && take) useHouse.getState().refund(cost);
+		if (next !== prev) present(next);
+	}
+	(0, import_react.useEffect)(() => {
+		const onKey = (event) => {
+			const target = event.target;
+			if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return;
+			const phaseNow = tableRef.current.phase;
+			const key = event.key.toLowerCase();
+			if (key === "h") act("hit");
+			else if (key === "s") act("stand");
+			else if (key === "d") act("double");
+			else if (key === "p") act("split");
+			else if (key === "enter" && (phaseNow === "bet" || phaseNow === "done")) onDeal();
+		};
+		window.addEventListener("keydown", onKey);
+		return () => window.removeEventListener("keydown", onKey);
+	}, [busy, wager]);
+	const phase = table.phase;
+	const dealerShown = phase === "done" ? table.dealer.slice(0, shown) : table.dealer.slice(0, 1);
+	const holeDown = phase === "player" || phase === "insurance";
+	const active = table.hands[table.active];
+	const scoreOf = (cards) => {
+		const { total, soft } = handTotal(cards);
+		if (total > 21) return t("bjBust");
+		if (soft && total !== 21) return t("bjSoft", { n: total });
+		return t("bjTotal", { n: total });
+	};
+	const dealerTotal = !holeDown && dealerShown.length >= 2 ? scoreOf(dealerShown) : "";
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "text-xs tracking-[0.2em] text-accent uppercase",
+			children: t("bjShoe")
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+			className: "mt-1 font-display text-5xl leading-none",
+			children: t("gameBlackjack")
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "mt-3 max-w-prose text-muted",
+			children: t("bjIntro")
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "felt-surface mt-6 rounded-card border border-gold-dim px-4 py-5",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "text-xs tracking-[0.16em] text-ivory/70 uppercase",
+					children: [t("bjDealer"), dealerTotal ? ` · ${dealerTotal}` : ""]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-2 flex gap-2",
+					children: [
+						dealerShown.map((card, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlayingCard, { card }, `${card.r}${card.s}${index}`)),
+						holeDown && table.dealer.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlayingCard, { down: true }) : null,
+						table.dealer.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlayingCard, { down: true }) : null
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: `mt-6 grid gap-4 ${table.hands.length > 1 ? "sm:grid-cols-2" : ""}`,
+					children: table.hands.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-sm text-ivory/80",
+						children: t("bjWait")
+					}) : table.hands.map((hand, index) => {
+						const live = phase === "player" && index === table.active;
+						return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: `rounded-md p-2 ${live ? "ring-2 ring-gold" : ""}`,
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "text-xs tracking-[0.16em] text-ivory/70 uppercase",
+								children: [
+									table.hands.length > 1 ? t(index === 0 ? "bjLeft" : "bjRight") : t("you"),
+									" · ",
+									scoreOf(hand.cards),
+									" ·",
+									" ",
+									t("betOf", { n: fmt(hand.bet) })
+								]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mt-2 flex flex-wrap gap-2",
+								children: hand.cards.map((card, cardIndex) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlayingCard, { card }, `${card.r}${card.s}${cardIndex}`))
+							})]
+						}, index);
+					})
+				})
+			]
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "mt-5",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResultLine, {
+				text: banner,
+				tone
+			})
+		}),
+		phase === "bet" || phase === "done" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mt-5 space-y-4",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mb-2 text-xs tracking-wide text-muted uppercase",
+				children: t("bjAdd", { n: fmt(wager) })
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DenomPicker, {
+				value: denom,
+				onChange: (value) => {
+					setDenom(value);
+					setWager((prev) => Math.min(prev + value, Math.max(value, chips)));
+					playCue("chip");
+				},
+				denoms: DENOMS,
+				disabled: busy
+			})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-wrap gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(GoldButton, {
+					disabled: busy || wager < 10 || chips < wager,
+					onClick: () => onDeal(wager),
+					children: t("bjDeal", { n: fmt(wager) })
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GhostButton, {
+					disabled: busy,
+					onClick: () => {
+						setWager(0);
+					},
+					children: t("bjClear")
+				})]
+			})]
+		}) : null,
+		phase === "insurance" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mt-5 flex flex-wrap gap-2",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(GoldButton, {
+				disabled: busy || chips < insuranceCost(table),
+				onClick: () => insure(true),
+				children: t("bjInsure", { n: fmt(insuranceCost(table)) })
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GhostButton, {
+				disabled: busy,
+				onClick: () => insure(false),
+				children: t("bjDecline")
+			})]
+		}) : null,
+		phase === "player" && active ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mt-5 flex flex-wrap gap-2",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(GoldButton, {
+					disabled: !canHit(table),
+					onClick: () => act("hit"),
+					children: t("bjHit")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(GhostButton, {
+					disabled: !canStand(table),
+					onClick: () => act("stand"),
+					children: t("bjStand")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(GhostButton, {
+					disabled: !canDouble(table) || chips < active.bet,
+					onClick: () => act("double"),
+					children: t("bjDouble")
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(GhostButton, {
+					disabled: !canSplit(table) || chips < active.bet,
+					onClick: () => act("split"),
+					children: t("bjSplit")
+				})
+			]
+		}) : null,
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "mt-3 text-sm text-muted",
+			children: t("bjKeys")
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrokeRack, {}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(RuleNote, {
+			title: "House rules",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: t("bjRules1") }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: t("bjRules2") })]
+		})
+	] });
+}
+function BlackjackPage() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HouseShell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BlackjackGame, {}) });
+}
+//#endregion
+export { BlackjackPage as component };

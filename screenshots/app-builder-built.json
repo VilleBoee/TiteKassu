@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "TiteKassu",
+      "hasCanvas": false,
+      "bodyTextLen": 566,
+      "bodyTextHash": "b6239169f021c1b86f584403cf2ec41934804b068d4098c70c4fa3e97422f3c3",
+      "bodyTextPrefix": "TiteKassu Chips 2,500 FI EN Fruit Blackjack Roulette Hold'em PRI",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "TiteKassu",
+      "hasCanvas": false,
+      "bodyTextLen": 566,
+      "bodyTextHash": "b6239169f021c1b86f584403cf2ec41934804b068d4098c70c4fa3e97422f3c3",
+      "bodyTextPrefix": "TiteKassu Chips 2,500 FI EN Fruit Blackjack Roulette Hold'em PRI",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}
