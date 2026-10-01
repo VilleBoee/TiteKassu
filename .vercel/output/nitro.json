@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-01T20:27:13.470Z",
+  "date": "2026-10-01T20:44:53.045Z",
   "preset": "vercel",
   "framework": {
     "name": "nitro",
@@ -9,7 +9,7 @@
     "nitro": "3.0.260610-beta"
   },
   "serverEntry": "functions/__server.func/index.mjs",
-  "publicDir": "static",
+  "publicDir": "static/TiteKassu",
   "commands": {
     "preview": "npx srvx --static ../../static ./functions/__server.func/index.mjs",
     "deploy": "npx vercel deploy --prebuilt"

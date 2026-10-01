@@ -2,8 +2,8 @@ import { i as __toESM, n as __exportAll } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime, _ as lazyRouteComponent, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, v as createFileRoute, x as useRouter, y as createRootRoute } from "../_libs/@tanstack/react-router+[...].mjs";
 import { r as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BrQ0aWJz.js
-var router_BrQ0aWJz_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DHn6Grgs.js
+var router_DHn6Grgs_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
@@ -297,8 +297,9 @@ function PreviewHostBridge() {
 	}, [router]);
 	return null;
 }
-var styles_default = "/assets/styles-BZu8x8sy.css";
+var styles_default = "/TiteKassu/assets/styles-BhmVtN7q.css";
 var APP_NAME = "TiteKassu";
+var publicBase = "/TiteKassu/";
 var Route$5 = createRootRoute({
 	head: () => ({
 		meta: [
@@ -321,7 +322,7 @@ var Route$5 = createRootRoute({
 			{
 				rel: "icon",
 				type: "image/svg+xml",
-				href: "/favicon.svg"
+				href: `${publicBase}favicon.svg`
 			},
 			{
 				rel: "stylesheet",
@@ -329,11 +330,11 @@ var Route$5 = createRootRoute({
 			},
 			{
 				rel: "manifest",
-				href: "/__grok/manifest.webmanifest"
+				href: `${publicBase}__grok/manifest.webmanifest`
 			},
 			{
 				rel: "apple-touch-icon",
-				href: "/__grok/icon-180.png"
+				href: `${publicBase}__grok/icon-180.png`
 			},
 			{
 				rel: "preconnect",
@@ -411,11 +412,17 @@ var rootRouteChildren = {
 	})
 };
 var routeTree = Route$5._addFileChildren(rootRouteChildren)._addFileTypes();
+function basepath() {
+	const trimmed = "/TiteKassu/".replace(/\/$/, "");
+	if (!trimmed || trimmed === "/") return void 0;
+	return trimmed;
+}
 function getRouter() {
 	return createRouter({
 		routeTree,
+		basepath: basepath(),
 		defaultErrorComponent: AppErrorComponent
 	});
 }
 //#endregion
-export { getRouter, router_BrQ0aWJz_exports as t };
+export { getRouter, router_DHn6Grgs_exports as t };

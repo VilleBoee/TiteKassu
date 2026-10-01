@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="TiteKassu">
+  <rect width="32" height="32" rx="6" fill="#100c0b"/>
+  <rect x="2" y="2" width="28" height="28" rx="5" fill="#146348"/>
+  <rect x="4.25" y="4.25" width="23.5" height="23.5" rx="3.5" fill="#100c0b"/>
+  <path fill="#e0b15c" d="M7.2 8.2h17.6v4.6H18.6V24h-5.2V12.8H7.2z"/>
+</svg>

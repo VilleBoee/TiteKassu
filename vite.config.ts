@@ -145,7 +145,21 @@ function authPopupPlugin(): Plugin {
 // `0.0.0.0:8080` is the live-preview contract — don't change host/port.
 // The dev server starts once `src/router.tsx` and `src/routes/` exist — see
 // AGENTS.md § "First scaffold".
+const pagesBuild = process.env.PAGES === "1";
+
+/** GitHub project site base, always `/` or `/name/`. Override with PAGES_BASE. */
+function pagesBase(): string {
+  const raw = process.env.PAGES_BASE?.trim() || "/TiteKassu/";
+  if (raw === "/" || raw === "") return "/";
+  const withLead = raw.startsWith("/") ? raw : `/${raw}`;
+  return withLead.endsWith("/") ? withLead : `${withLead}/`;
+}
+
+const pagesBasePath = pagesBuild ? pagesBase() : "/";
+const pagesRouterBase = pagesBasePath === "/" ? undefined : pagesBasePath.replace(/\/$/, "");
+
 export default defineConfig(({ command, isPreview }) => ({
+  base: pagesBasePath,
   server: {
     host: "0.0.0.0",
     port: 8080,
@@ -166,7 +180,25 @@ export default defineConfig(({ command, isPreview }) => ({
     // PWA head + ?install=1 tutorial page; runs before Start/Nitro.
     grokPwaPlugin(),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart(
+      pagesBuild
+        ? {
+            router: pagesRouterBase ? { basepath: pagesRouterBase } : undefined,
+            prerender: {
+              enabled: true,
+              crawlLinks: true,
+              autoStaticPathsDiscovery: true,
+            },
+            pages: [
+              { path: "/" },
+              { path: "/slots" },
+              { path: "/blackjack" },
+              { path: "/roulette" },
+              { path: "/poker" },
+            ],
+          }
+        : undefined,
+    ),
     ...(command === "build" || isPreview
       ? [
           nitro({
