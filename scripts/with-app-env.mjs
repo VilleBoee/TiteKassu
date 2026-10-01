@@ -90,14 +90,16 @@ export function projectRoot() {
 /**
  * Spawn options for the wrapped command.
  *
- * On Windows, `npm run` puts `node_modules/.bin` on PATH, but the Vite bin is
- * `vite.cmd`. `child_process.spawn` does not apply PATHEXT, so a bare `vite`
- * fails with ENOENT in PowerShell and VS Code. A shell resolves `.cmd`.
- * Unix is unchanged: no shell, so signals and argv stay exact.
+ * A bare Windows name such as `vite` is `vite.cmd`. `spawn` does not apply
+ * PATHEXT, so that case needs a shell. A real executable path must NOT use a
+ * shell: `C:\Program Files\nodejs\node.exe` is split into `C:\Program` and the
+ * build dies. Unix never uses a shell, so signals and argv stay exact.
  */
-export function spawnOptions(platform = process.platform) {
-  if (platform === "win32") return { shell: true, windowsHide: true };
-  return { shell: false };
+export function spawnOptions(command, platform = process.platform) {
+  const bareName =
+    platform === "win32" && !/[\\/]/.test(command) && !/\.(?:exe|cmd|bat|js|mjs|cjs)$/i.test(command);
+  if (bareName) return { shell: true, windowsHide: true };
+  return { shell: false, windowsHide: platform === "win32" };
 }
 
 /**
@@ -127,7 +129,7 @@ function main(argv) {
   const child = spawn(command, args, {
     stdio: "inherit",
     env,
-    ...spawnOptions(process.platform),
+    ...spawnOptions(command, process.platform),
   });
   // The dev server is long-running and is stopped by signalling this wrapper.
   for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) {

@@ -74,10 +74,12 @@ test("vite loadEnv resolves the wrapped value", () => {
   assert.equal(merged.VITE_AUTH_ENABLED, "false");
 });
 
-test("windows spawn uses a shell so vite.cmd resolves", () => {
-  assert.equal(spawnOptions("win32").shell, true);
-  assert.equal(spawnOptions("linux").shell, false);
-  assert.equal(spawnOptions("darwin").shell, false);
+test("windows uses a shell only for a bare command name", () => {
+  assert.equal(spawnOptions("vite", "win32").shell, true);
+  assert.equal(spawnOptions("node", "win32").shell, true);
+  assert.equal(spawnOptions("C:\\Program Files\\nodejs\\node.exe", "win32").shell, false);
+  assert.equal(spawnOptions("vite", "linux").shell, false);
+  assert.equal(spawnOptions("node", "darwin").shell, false);
 });
 
 test("the wrapped command runs with the app env applied", async () => {
