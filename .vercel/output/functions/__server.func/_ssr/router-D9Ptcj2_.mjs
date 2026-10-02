@@ -2,8 +2,8 @@ import { i as __toESM, n as __exportAll } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime, _ as lazyRouteComponent, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, v as createFileRoute, x as useRouter, y as createRootRoute } from "../_libs/@tanstack/react-router+[...].mjs";
 import { r as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BpbouTsd.js
-var router_BpbouTsd_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
+//#region node_modules/.nitro/vite/services/ssr/assets/router-D9Ptcj2_.js
+var router_D9Ptcj2__exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
@@ -374,7 +374,7 @@ var Route$2 = createFileRoute("/poker")({
 	head: () => ({ meta: [{ title: "Texas Hold'em · TiteKassu" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./roulette-CaqpELjL.mjs");
+var $$splitComponentImporter$1 = () => import("./roulette-BCNi9RQ2.mjs");
 var Route$1 = createFileRoute("/roulette")({
 	head: () => ({ meta: [{ title: "Roulette · TiteKassu" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$1, "component")
@@ -425,4 +425,4 @@ function getRouter() {
 	});
 }
 //#endregion
-export { getRouter, router_BpbouTsd_exports as t };
+export { getRouter, router_D9Ptcj2__exports as t };

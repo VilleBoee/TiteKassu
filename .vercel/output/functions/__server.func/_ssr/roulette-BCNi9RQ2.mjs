@@ -2,7 +2,7 @@ import { i as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { i as playCue, n as BrokeRack, o as useHouse, r as HouseShell, s as useI18n } from "./shell-DE_NL6o6.mjs";
 import { h as useReducedMotion, n as GhostButton, o as ResultLine, p as randInt, r as GoldButton, s as RuleNote, t as DenomPicker } from "./use-reduced-motion-DNYynpH8.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/roulette-CaqpELjL.js
+//#region node_modules/.nitro/vite/services/ssr/assets/roulette-BCNi9RQ2.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var WHEEL = [
@@ -226,6 +226,7 @@ var CELL_W = 48;
 var CELL_H = 46;
 var ZERO_W = 48;
 var STEP = 360 / 37;
+var SPIN_MS = 8e3;
 var MODES = [
 	"straight",
 	"split",
@@ -235,7 +236,7 @@ var MODES = [
 ];
 function landingRotation(current, n) {
 	const desired = (-(wheelIndex(n) * STEP + STEP / 2) % 360 + 360) % 360;
-	let target = current + 1800;
+	let target = current + 2880;
 	const mod = (target % 360 + 360) % 360;
 	target += (desired - mod + 360) % 360;
 	return target;
@@ -420,12 +421,12 @@ function RouletteGame() {
 		const nextRot = landingRotation(rotRef.current, n);
 		rotRef.current = nextRot;
 		setRotation(nextRot);
-		setBall((prev) => prev - 1440);
+		setBall((prev) => prev - 3240);
 		timer.current = window.setTimeout(() => {
 			setWinning(n);
 			setHistory((prev) => [n, ...prev].slice(0, 16));
 			flush(true);
-		}, reduced ? 40 : 4300);
+		}, reduced ? 40 : 8080);
 	}
 	const straightOf = (n) => bets.find((item) => item.bet.kind === "straight" && item.bet.n === n)?.amount ?? 0;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
@@ -456,7 +457,7 @@ function RouletteGame() {
 							style: {
 								transform: `rotate(${rotation}deg)`,
 								transformOrigin: "160px 160px",
-								transition: spinning ? "transform 4.2s cubic-bezier(0.12, 0.65, 0.05, 1)" : "none"
+								transition: spinning ? `transform ${SPIN_MS}ms cubic-bezier(0.07, 0.72, 0.04, 1)` : "none"
 							},
 							children: [
 								WHEEL.map((n, index) => {
@@ -502,7 +503,7 @@ function RouletteGame() {
 						className: "pointer-events-none absolute inset-0",
 						style: {
 							transform: `rotate(${ball}deg)`,
-							transition: spinning ? "transform 4.2s cubic-bezier(0.15, 0.55, 0.1, 1)" : "none"
+							transition: spinning ? `transform ${SPIN_MS}ms cubic-bezier(0.12, 0.45, 0.02, 1)` : "none"
 						},
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "absolute top-3 left-1/2 size-3.5 -translate-x-1/2 rounded-full border border-gold-dim bg-ivory" })
 					})]

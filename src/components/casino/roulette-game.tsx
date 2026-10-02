@@ -26,13 +26,14 @@ const CELL_W = 48;
 const CELL_H = 46;
 const ZERO_W = 48;
 const STEP = 360 / 37;
+const SPIN_MS = 8000;
 const MODES = ["straight", "split", "street", "corner", "six"] as const;
 type Mode = (typeof MODES)[number];
 
 function landingRotation(current: number, n: number): number {
   const mid = wheelIndex(n) * STEP + STEP / 2;
   const desired = ((-mid % 360) + 360) % 360;
-  let target = current + 360 * 5;
+  let target = current + 360 * 8;
   const mod = ((target % 360) + 360) % 360;
   target += (desired - mod + 360) % 360;
   return target;
@@ -185,12 +186,12 @@ export function RouletteGame() {
     const nextRot = landingRotation(rotRef.current, n);
     rotRef.current = nextRot;
     setRotation(nextRot);
-    setBall((prev) => prev - 360 * 4);
+    setBall((prev) => prev - 360 * 9);
     timer.current = window.setTimeout(() => {
       setWinning(n);
       setHistory((prev) => [n, ...prev].slice(0, 16));
       flush(true);
-    }, reduced ? 40 : 4300);
+    }, reduced ? 40 : SPIN_MS + 80);
   }
 
   const straightOf = (n: number) => bets.find((item) => item.bet.kind === "straight" && item.bet.n === n)?.amount ?? 0;
@@ -208,7 +209,7 @@ export function RouletteGame() {
                 style={{
                   transform: `rotate(${rotation}deg)`,
                   transformOrigin: "160px 160px",
-                  transition: spinning ? "transform 4.2s cubic-bezier(0.12, 0.65, 0.05, 1)" : "none",
+                  transition: spinning ? `transform ${SPIN_MS}ms cubic-bezier(0.07, 0.72, 0.04, 1)` : "none",
                 }}
               >
                 {WHEEL.map((n, index) => {
@@ -232,7 +233,7 @@ export function RouletteGame() {
               className="pointer-events-none absolute inset-0"
               style={{
                 transform: `rotate(${ball}deg)`,
-                transition: spinning ? "transform 4.2s cubic-bezier(0.15, 0.55, 0.1, 1)" : "none",
+                transition: spinning ? `transform ${SPIN_MS}ms cubic-bezier(0.12, 0.45, 0.02, 1)` : "none",
               }}
             >
               <span className="absolute top-3 left-1/2 size-3.5 -translate-x-1/2 rounded-full border border-gold-dim bg-ivory" />
