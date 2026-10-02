@@ -2,7 +2,7 @@ import { i as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { i as playCue, n as BrokeRack, o as useHouse, r as HouseShell, s as useI18n } from "./shell-DE_NL6o6.mjs";
 import { h as useReducedMotion, n as GhostButton, o as ResultLine, p as randInt, r as GoldButton, s as RuleNote, t as DenomPicker } from "./use-reduced-motion-DNYynpH8.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/roulette-BCNi9RQ2.js
+//#region node_modules/.nitro/vite/services/ssr/assets/roulette-7X3J8Hu-.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var WHEEL = [
@@ -226,7 +226,7 @@ var CELL_W = 48;
 var CELL_H = 46;
 var ZERO_W = 48;
 var STEP = 360 / 37;
-var SPIN_MS = 8e3;
+var SPIN_MS = 2e4;
 var MODES = [
 	"straight",
 	"split",
@@ -234,12 +234,18 @@ var MODES = [
 	"corner",
 	"six"
 ];
-function landingRotation(current, n) {
-	const desired = (-(wheelIndex(n) * STEP + STEP / 2) % 360 + 360) % 360;
-	let target = current + 2880;
+function landingRotation(current, n, ballAngle) {
+	const desired = ((ballAngle - (wheelIndex(n) * STEP + STEP / 2)) % 360 + 360) % 360;
+	let target = current + 360 * (14 + randInt(3));
 	const mod = (target % 360 + 360) % 360;
 	target += (desired - mod + 360) % 360;
 	return target;
+}
+/** Next ball angle. Several turns, and not back to the pointer at the top. */
+function nextBallStop(current) {
+	const offset = 55 + randInt(250);
+	const base = current - 360 * (14 + randInt(4));
+	return base - ((base % 360 + 360) % 360 - offset + 360) % 360;
 }
 function wedge(cx, cy, r, half) {
 	const a0 = (-90 - half) * Math.PI / 180;
@@ -275,10 +281,12 @@ function RouletteGame() {
 	const [tone, setTone] = (0, import_react.useState)("idle");
 	const betsRef = (0, import_react.useRef)(bets);
 	const rotRef = (0, import_react.useRef)(rotation);
+	const ballRef = (0, import_react.useRef)(ball);
 	const owed = (0, import_react.useRef)(null);
 	const timer = (0, import_react.useRef)(0);
 	betsRef.current = bets;
 	rotRef.current = rotation;
+	ballRef.current = ball;
 	const flush = (announce) => {
 		const due = owed.current;
 		if (!due) return;
@@ -418,15 +426,18 @@ function RouletteGame() {
 		setChoices(null);
 		setPending(null);
 		playCue("spin");
-		const nextRot = landingRotation(rotRef.current, n);
+		const nextBall = nextBallStop(ballRef.current);
+		const ballAngle = (nextBall % 360 + 360) % 360;
+		ballRef.current = nextBall;
+		setBall(nextBall);
+		const nextRot = landingRotation(rotRef.current, n, ballAngle);
 		rotRef.current = nextRot;
 		setRotation(nextRot);
-		setBall((prev) => prev - 3240);
 		timer.current = window.setTimeout(() => {
 			setWinning(n);
 			setHistory((prev) => [n, ...prev].slice(0, 16));
 			flush(true);
-		}, reduced ? 40 : 8080);
+		}, reduced ? 40 : 20080);
 	}
 	const straightOf = (n) => bets.find((item) => item.bet.kind === "straight" && item.bet.n === n)?.amount ?? 0;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
@@ -448,12 +459,12 @@ function RouletteGame() {
 				className: "min-w-0",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "relative mx-auto w-full max-w-xs",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 						viewBox: "0 0 320 320",
 						className: "w-full",
 						role: "img",
 						"aria-label": winning == null ? tx("Roulette wheel") : `${tx("Landed on ")}${winning}`,
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("g", {
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("g", {
 							style: {
 								transform: `rotate(${rotation}deg)`,
 								transformOrigin: "160px 160px",
@@ -495,10 +506,7 @@ function RouletteGame() {
 									fill: "var(--color-gold)"
 								})
 							]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("polygon", {
-							points: "160,2 151,18 169,18",
-							fill: "var(--color-gold)"
-						})]
+						})
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "pointer-events-none absolute inset-0",
 						style: {

@@ -26,17 +26,26 @@ const CELL_W = 48;
 const CELL_H = 46;
 const ZERO_W = 48;
 const STEP = 360 / 37;
-const SPIN_MS = 8000;
+const SPIN_MS = 20000;
 const MODES = ["straight", "split", "street", "corner", "six"] as const;
 type Mode = (typeof MODES)[number];
 
-function landingRotation(current: number, n: number): number {
+function landingRotation(current: number, n: number, ballAngle: number): number {
   const mid = wheelIndex(n) * STEP + STEP / 2;
-  const desired = ((-mid % 360) + 360) % 360;
-  let target = current + 360 * 8;
+  const desired = (((ballAngle - mid) % 360) + 360) % 360;
+  let target = current + 360 * (14 + randInt(3));
   const mod = ((target % 360) + 360) % 360;
   target += (desired - mod + 360) % 360;
   return target;
+}
+
+/** Next ball angle. Several turns, and not back to the pointer at the top. */
+function nextBallStop(current: number): number {
+  const offset = 55 + randInt(250);
+  const turns = 14 + randInt(4);
+  const base = current - 360 * turns;
+  const mod = ((base % 360) + 360) % 360;
+  return base - ((mod - offset + 360) % 360);
 }
 
 function wedge(cx: number, cy: number, r: number, half: number): string {
@@ -71,10 +80,12 @@ export function RouletteGame() {
   const [tone, setTone] = useState<"win" | "push" | "lose" | "idle">("idle");
   const betsRef = useRef(bets);
   const rotRef = useRef(rotation);
+  const ballRef = useRef(ball);
   const owed = useRef<{ stake: number; back: number; note: string } | null>(null);
   const timer = useRef(0);
   betsRef.current = bets;
   rotRef.current = rotation;
+  ballRef.current = ball;
 
   const flush = (announce: boolean) => {
     const due = owed.current;
@@ -183,10 +194,13 @@ export function RouletteGame() {
     setChoices(null);
     setPending(null);
     playCue("spin");
-    const nextRot = landingRotation(rotRef.current, n);
+    const nextBall = nextBallStop(ballRef.current);
+    const ballAngle = ((nextBall % 360) + 360) % 360;
+    ballRef.current = nextBall;
+    setBall(nextBall);
+    const nextRot = landingRotation(rotRef.current, n, ballAngle);
     rotRef.current = nextRot;
     setRotation(nextRot);
-    setBall((prev) => prev - 360 * 9);
     timer.current = window.setTimeout(() => {
       setWinning(n);
       setHistory((prev) => [n, ...prev].slice(0, 16));
@@ -227,7 +241,6 @@ export function RouletteGame() {
                 <circle cx="160" cy="160" r="78" fill="var(--color-felt-deep)" stroke="var(--color-gold-dim)" />
                 <circle cx="160" cy="160" r="18" fill="var(--color-gold)" />
               </g>
-              <polygon points="160,2 151,18 169,18" fill="var(--color-gold)" />
             </svg>
             <div
               className="pointer-events-none absolute inset-0"
