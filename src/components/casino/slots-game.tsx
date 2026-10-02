@@ -12,6 +12,7 @@ const REEL_H = 92;
 const LOOPS = 5;
 const DURATION = [1100, 1600, 2100];
 const BETS = [5, 10, 25, 50, 100] as const;
+const AUTO_SPINS = [10, 25, 50] as const;
 
 function Reel({
   strip,
@@ -93,22 +94,48 @@ export function SlotsGame() {
   const [spinning, setSpinning] = useState(false);
   const [banner, setBanner] = useState("Center line pays.");
   const [tone, setTone] = useState<"win" | "push" | "lose" | "idle">("idle");
+  const [autoLeft, setAutoLeft] = useState(0);
   const pending = useRef<{ id: number; bet: number; mult: number; label: string } | null>(null);
   const timer = useRef(0);
+  const gapTimer = useRef(0);
+  const autoRef = useRef(0);
+  const betRef = useRef(bet);
+  const heldRef = useRef(held);
+  const stopsRef = useRef(stops);
+  const spinningRef = useRef(false);
+  const spinIdRef = useRef(0);
+  betRef.current = bet;
+  heldRef.current = held;
+  stopsRef.current = stops;
 
-  const flush = (announce: boolean) => {
+  const releaseHolds = () => {
+    heldRef.current = [false, false, false];
+    setHeld([false, false, false]);
+  };
+
+  const stopAuto = () => {
+    autoRef.current = 0;
+    setAutoLeft(0);
+    window.clearTimeout(gapTimer.current);
+  };
+
+  const flushRef = useRef<(announce: boolean) => void>(() => {});
+  const spinRef = useRef<() => boolean>(() => false);
+
+  flushRef.current = (announce) => {
     const owed = pending.current;
     if (!owed) return;
     pending.current = null;
     window.clearTimeout(timer.current);
     const back = owed.mult * owed.bet;
     useHouse.getState().settle("slots", owed.bet, back, owed.mult ? owed.label : "No line");
+    releaseHolds();
+    spinningRef.current = false;
     if (!announce) return;
     setSpinning(false);
     if (back > owed.bet) {
       setTone("win");
       setBanner(`${owed.label} · +${fmt(back - owed.bet)}`);
-      setHeld([false, false, false]);
       playCue("win");
     } else if (back === owed.bet) {
       setTone("push");
@@ -119,39 +146,74 @@ export function SlotsGame() {
       setBanner(owed.label === "No line" ? "No line" : `${owed.label} · −${fmt(owed.bet - back)}`);
       playCue("lose");
     }
+    if (autoRef.current > 1) {
+      autoRef.current -= 1;
+      setAutoLeft(autoRef.current);
+      const gap = 100 + randInt(151);
+      gapTimer.current = window.setTimeout(() => {
+        if (autoRef.current <= 0) return;
+        if (!spinRef.current()) stopAuto();
+      }, gap);
+    } else if (autoRef.current === 1) {
+      stopAuto();
+    }
   };
 
-  useEffect(() => () => flush(false), []);
-
-  const line = stops.map((stop, reel) => REELS[reel]![stop]!) as [Lamp, Lamp, Lamp];
-
-  function spin() {
-    if (spinning) return;
-    if (held.every(Boolean)) return;
-    if (!useHouse.getState().stake(bet)) return;
-    const next = stops.map((stop, reel) => (held[reel] ? stop : randInt(REELS[reel]!.length)));
+  spinRef.current = () => {
+    if (spinningRef.current) return false;
+    const locks = heldRef.current;
+    if (locks.every(Boolean)) return false;
+    const stake = betRef.current;
+    if (!useHouse.getState().stake(stake)) return false;
+    const current = stopsRef.current;
+    const next = current.map((stop, reel) => (locks[reel] ? stop : randInt(REELS[reel]!.length)));
     const outcome = evaluateLine([
       REELS[0]![next[0]!]!,
       REELS[1]![next[1]!]!,
       REELS[2]![next[2]!]!,
     ]);
-    const id = spinId + 1;
-    pending.current = { id, bet, mult: outcome.mult, label: outcome.label };
+    const id = spinIdRef.current + 1;
+    spinIdRef.current = id;
+    pending.current = { id, bet: stake, mult: outcome.mult, label: outcome.label };
+    stopsRef.current = next;
     setStops(next);
     setSpinId(id);
+    spinningRef.current = true;
     setSpinning(true);
     setTone("idle");
     setBanner("Spinning");
     playCue("spin");
-    const wait = reduced ? 40 : Math.max(...DURATION.filter((_, index) => !held[index]), 400);
-    timer.current = window.setTimeout(() => flush(true), wait + 40);
+    const wait = reduced ? 40 : Math.max(...DURATION.filter((_, index) => !locks[index]), 400);
+    timer.current = window.setTimeout(() => flushRef.current(true), wait + 40);
+    return true;
+  };
+
+  useEffect(
+    () => () => {
+      window.clearTimeout(timer.current);
+      window.clearTimeout(gapTimer.current);
+      flushRef.current(false);
+    },
+    [],
+  );
+
+  const line = stops.map((stop, reel) => REELS[reel]![stop]!) as [Lamp, Lamp, Lamp];
+  const autoOn = autoLeft > 0;
+
+  function startAuto(count: number) {
+    if (autoRef.current) return;
+    autoRef.current = count;
+    setAutoLeft(count);
+    if (spinningRef.current) return;
+    if (!spinRef.current()) stopAuto();
   }
 
   function toggleHold(index: 0 | 1 | 2) {
-    if (spinning) return;
+    if (spinningRef.current) return;
     setHeld((prev) => {
       const next: [boolean, boolean, boolean] = [...prev];
       next[index] = !next[index];
+      heldRef.current = next;
       return next;
     });
     playCue("tick");
@@ -161,7 +223,7 @@ export function SlotsGame() {
     <div>
       <p className="text-xs tracking-[0.2em] text-accent uppercase">{tx("Lamp")}</p>
       <h1 className="mt-1 font-display text-5xl leading-none">{tx("Fruit machine")}</h1>
-      <p className="mt-3 max-w-prose text-muted">{tx("Three reels, one line through the middle. Hold a reel and it sits for the next paid spin.")}</p>
+      <p className="mt-3 max-w-prose text-muted">{tx("Three reels, one line through the middle. Hold a reel and it stays for one spin only.")}</p>
       <div className="mt-6 rounded-card border border-gold-dim bg-panel p-3">
         <div className="felt-surface grid grid-cols-3 gap-2 rounded-md p-2" aria-busy={spinning}>
           {REELS.map((strip, index) => (
@@ -200,11 +262,35 @@ export function SlotsGame() {
       <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="mb-2 text-xs tracking-wide text-muted uppercase">{tx("Bet")}</p>
-          <DenomPicker value={bet} onChange={setBet} denoms={BETS} disabled={spinning} label="Bet size" />
+          <DenomPicker value={bet} onChange={setBet} denoms={BETS} disabled={spinning || autoOn} label="Bet size" />
         </div>
-        <GoldButton className="min-w-32 px-8" disabled={spinning || held.every(Boolean) || chips < bet} onClick={spin}>
-          {spinning ? tx("Spinning") : `${tx("Spin ")}${fmt(bet)}`}
-        </GoldButton>
+        <div className="flex flex-col items-stretch gap-2 sm:items-end">
+          {autoOn ? (
+            <GoldButton className="min-w-32 px-8" onClick={stopAuto}>
+              {tx("Stop auto")} · {autoLeft}
+            </GoldButton>
+          ) : (
+            <GoldButton
+              className="min-w-32 px-8"
+              disabled={spinning || held.every(Boolean) || chips < bet}
+              onClick={() => spinRef.current()}
+            >
+              {spinning ? tx("Spinning") : `${tx("Spin ")}${fmt(bet)}`}
+            </GoldButton>
+          )}
+          <div className="flex flex-wrap gap-2">
+            {AUTO_SPINS.map((count) => (
+              <GhostButton
+                key={count}
+                cabinet
+                disabled={autoOn || spinning || held.every(Boolean) || chips < bet}
+                onClick={() => startAuto(count)}
+              >
+                {tx(`${count} spins`)}
+              </GhostButton>
+            ))}
+          </div>
+        </div>
       </div>
       <BrokeRack />
       <RuleNote title="Paytable">
@@ -216,7 +302,7 @@ export function SlotsGame() {
             </li>
           ))}
         </ul>
-        <p>{tx("Only the center symbol of each reel counts. Holds clear after a win that beats the stake.")}</p>
+        <p>{tx("Only the center symbol of each reel counts. A hold lasts one spin, then every reel is free again.")}</p>
       </RuleNote>
     </div>
   );

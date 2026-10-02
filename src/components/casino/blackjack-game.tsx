@@ -34,17 +34,19 @@ export function BlackjackGame() {
   const [table, setTable] = useState<Table>(() => createTable());
   const [banner, setBanner] = useState("Place a bet.");
   const [tone, setTone] = useState<"win" | "push" | "lose" | "idle">("idle");
-  const [shown, setShown] = useState(1);
+  const [view, setView] = useState({ players: [] as number[], dealer: 0, hole: false });
   const [busy, setBusy] = useState(false);
   const tableRef = useRef(table);
   const owed = useRef<{ stake: number; back: number; note: string } | null>(null);
   const timer = useRef(0);
+  const gen = useRef(0);
 
-  const flush = (announce: boolean) => {
+  const flushRef = useRef<(announce: boolean) => void>(() => {});
+  flushRef.current = (announce) => {
     const due = owed.current;
     if (!due) return;
     owed.current = null;
-    window.clearInterval(timer.current);
+    window.clearTimeout(timer.current);
     useHouse.getState().settle("blackjack", due.stake, due.back, due.note);
     if (!announce) return;
     setBusy(false);
@@ -61,39 +63,106 @@ export function BlackjackGame() {
     }
   };
 
-  useEffect(() => () => flush(false), []);
+  useEffect(
+    () => () => {
+      gen.current += 1;
+      window.clearTimeout(timer.current);
+      flushRef.current(false);
+    },
+    [],
+  );
 
-  function present(next: Table) {
+  const runRef = useRef<(next: Table, kind: "deal" | "peek" | "play") => void>(() => {});
+  runRef.current = (next, kind) => {
+    const id = gen.current + 1;
+    gen.current = id;
+    const live = () => gen.current === id;
+    const pace = (ms: number) =>
+      new Promise<void>((resolve) => {
+        timer.current = window.setTimeout(resolve, reduced ? 70 : ms);
+      });
+    if (next.phase === "done" && next.settlement) {
+      const stake = next.hands.reduce((sum, hand) => sum + hand.bet, 0) + next.insuranceBet;
+      owed.current = {
+        stake,
+        back: next.settlement.mainReturn + next.settlement.insuranceReturn,
+        note: next.settlement.note,
+      };
+    }
     tableRef.current = next;
     setTable(next);
-    if (next.phase !== "done" || !next.settlement) {
-      setShown(1);
-      setBanner(next.phase === "insurance" ? "Insurance?" : "Your hand");
-      setTone("idle");
-      playCue("card");
-      return;
-    }
-    const stake = next.hands.reduce((sum, hand) => sum + hand.bet, 0) + next.insuranceBet;
-    const back = next.settlement.mainReturn + next.settlement.insuranceReturn;
-    owed.current = { stake, back, note: next.settlement.note };
-    const count = next.dealer.length;
-    if (reduced || count <= 2) {
-      setShown(count);
-      flush(true);
-      return;
-    }
     setBusy(true);
-    setShown(2);
-    setBanner("Dealer plays");
     setTone("idle");
-    playCue("card");
-    let n = 2;
-    timer.current = window.setInterval(() => {
-      n += 1;
-      setShown(n);
-      playCue("tick");
-      if (n >= count) flush(true);
-    }, 420);
+
+    const showHands = () => next.hands.map((hand) => hand.cards.length);
+
+    const finishIfLive = async () => {
+      let n = 2;
+      setBanner("Dealer plays");
+      setView({ players: showHands(), dealer: Math.min(2, next.dealer.length), hole: false });
+      playCue("card");
+      while (n < next.dealer.length) {
+        await pace(440);
+        if (!live()) return;
+        n += 1;
+        setView({ players: showHands(), dealer: n, hole: false });
+        playCue("tick");
+      }
+      await pace(560);
+      if (!live()) return;
+      flushRef.current(true);
+    };
+
+    void (async () => {
+      if (kind === "deal") {
+        setBanner("Dealing");
+        setView({ players: [0], dealer: 0, hole: false });
+        await pace(90);
+        if (!live()) return;
+        setView({ players: [1], dealer: 0, hole: false });
+        playCue("card");
+        await pace(460);
+        if (!live()) return;
+        setView({ players: [1], dealer: 1, hole: false });
+        playCue("card");
+        await pace(460);
+        if (!live()) return;
+        setView({ players: [2], dealer: 1, hole: false });
+        playCue("card");
+        await pace(460);
+        if (!live()) return;
+        setView({ players: [2], dealer: 1, hole: true });
+        playCue("card");
+        await pace(520);
+        if (!live()) return;
+        if (next.phase === "done") {
+          await finishIfLive();
+          return;
+        }
+        setBusy(false);
+        setBanner(next.phase === "insurance" ? "Insurance?" : "Your hand");
+        return;
+      }
+
+      setView({
+        players: showHands(),
+        dealer: 1,
+        hole: next.dealer.length > 1,
+      });
+      playCue("card");
+      if (next.phase !== "done") {
+        setBusy(false);
+        setBanner(next.phase === "insurance" ? "Insurance?" : "Your hand");
+        return;
+      }
+      await pace(kind === "peek" ? 420 : 360);
+      if (!live()) return;
+      await finishIfLive();
+    })();
+  };
+
+  function present(next: Table, kind: "deal" | "peek" | "play") {
+    runRef.current(next, kind);
   }
 
   function onDeal(amount = wager) {
@@ -101,7 +170,7 @@ export function BlackjackGame() {
     const ready = tableRef.current.phase === "done" ? clearHand(tableRef.current) : tableRef.current;
     if (ready.phase !== "bet") return;
     if (!useHouse.getState().stake(amount)) return;
-    present(deal(ready, amount));
+    present(deal(ready, amount), "deal");
   }
 
   function act(kind: "hit" | "stand" | "double" | "split") {
@@ -115,7 +184,7 @@ export function BlackjackGame() {
         useHouse.getState().refund(extra);
         return;
       }
-      present(next);
+      present(next, "play");
       return;
     }
     if (kind === "split") {
@@ -126,12 +195,12 @@ export function BlackjackGame() {
         useHouse.getState().refund(extra);
         return;
       }
-      present(next);
+      present(next, "play");
       return;
     }
     const next = kind === "hit" ? hit(prev) : stand(prev);
     if (next === prev) return;
-    present(next);
+    present(next, "play");
   }
 
   function insure(take: boolean) {
@@ -141,7 +210,7 @@ export function BlackjackGame() {
     if (take && !useHouse.getState().stake(cost)) return;
     const next = resolveInsurance(prev, take);
     if (next === prev && take) useHouse.getState().refund(cost);
-    if (next !== prev) present(next);
+    if (next !== prev) present(next, "peek");
   }
 
   useEffect(() => {
@@ -161,8 +230,8 @@ export function BlackjackGame() {
   }, [busy, wager]);
 
   const phase = table.phase;
-  const dealerShown = phase === "done" ? table.dealer.slice(0, shown) : table.dealer.slice(0, 1);
-  const holeDown = phase === "player" || phase === "insurance";
+  const dealerUp = table.dealer.slice(0, view.dealer);
+  const holeDown = view.hole && table.dealer.length > view.dealer;
   const active = table.hands[table.active];
   const scoreOf = (cards: readonly Card[]) => {
     const { total, soft } = handTotal(cards);
@@ -170,7 +239,7 @@ export function BlackjackGame() {
     if (soft && total !== 21) return t("bjSoft", { n: total });
     return t("bjTotal", { n: total });
   };
-  const dealerTotal = !holeDown && dealerShown.length >= 2 ? scoreOf(dealerShown) : "";
+  const dealerTotal = !holeDown && dealerUp.length >= 2 ? scoreOf(dealerUp) : "";
 
   return (
     <div>
@@ -183,10 +252,10 @@ export function BlackjackGame() {
           {dealerTotal ? ` · ${dealerTotal}` : ""}
         </p>
         <div className="mt-2 flex gap-2">
-          {dealerShown.map((card, index) => (
-            <PlayingCard key={`${card.r}${card.s}${index}`} card={card} />
+          {dealerUp.map((card, index) => (
+            <PlayingCard key={`${card.r}${card.s}${index}`} card={card} enter />
           ))}
-          {holeDown && table.dealer.length > 1 ? <PlayingCard down /> : null}
+          {holeDown ? <PlayingCard down enter /> : null}
           {table.dealer.length === 0 ? <PlayingCard down /> : null}
         </div>
         <div className={`mt-6 grid gap-4 ${table.hands.length > 1 ? "sm:grid-cols-2" : ""}`}>
@@ -194,16 +263,17 @@ export function BlackjackGame() {
             <p className="text-sm text-ivory/80">{t("bjWait")}</p>
           ) : (
             table.hands.map((hand, index) => {
-              const live = phase === "player" && index === table.active;
+              const live = phase === "player" && index === table.active && !busy;
+              const shownCards = hand.cards.slice(0, view.players[index] ?? 0);
               return (
                 <div key={index} className={`rounded-md p-2 ${live ? "ring-2 ring-gold" : ""}`}>
                   <p className="text-xs tracking-[0.16em] text-ivory/70 uppercase">
-                    {table.hands.length > 1 ? t(index === 0 ? "bjLeft" : "bjRight") : t("you")} · {scoreOf(hand.cards)} ·{" "}
-                    {t("betOf", { n: fmt(hand.bet) })}
+                    {table.hands.length > 1 ? t(index === 0 ? "bjLeft" : "bjRight") : t("you")}
+                    {shownCards.length ? ` · ${scoreOf(shownCards)}` : ""} · {t("betOf", { n: fmt(hand.bet) })}
                   </p>
                   <div className="mt-2 flex flex-wrap gap-2">
-                    {hand.cards.map((card, cardIndex) => (
-                      <PlayingCard key={`${card.r}${card.s}${cardIndex}`} card={card} />
+                    {shownCards.map((card, cardIndex) => (
+                      <PlayingCard key={`${card.r}${card.s}${cardIndex}`} card={card} enter />
                     ))}
                   </div>
                 </div>
@@ -215,7 +285,7 @@ export function BlackjackGame() {
       <div className="mt-5">
         <ResultLine text={banner} tone={tone} />
       </div>
-      {phase === "bet" || phase === "done" ? (
+      {phase === "bet" || (phase === "done" && !busy) ? (
         <div className="mt-5 space-y-4">
           <div>
             <p className="mb-2 text-xs tracking-wide text-muted uppercase">{t("bjAdd", { n: fmt(wager) })}</p>
@@ -245,7 +315,7 @@ export function BlackjackGame() {
           </div>
         </div>
       ) : null}
-      {phase === "insurance" ? (
+      {phase === "insurance" && !busy ? (
         <div className="mt-5 flex flex-wrap gap-2">
           <GoldButton disabled={busy || chips < insuranceCost(table)} onClick={() => insure(true)}>
             {t("bjInsure", { n: fmt(insuranceCost(table)) })}
@@ -255,7 +325,7 @@ export function BlackjackGame() {
           </GhostButton>
         </div>
       ) : null}
-      {phase === "player" && active ? (
+      {phase === "player" && active && !busy ? (
         <div className="mt-5 flex flex-wrap gap-2">
           <GoldButton disabled={!canHit(table)} onClick={() => act("hit")}>
             {t("bjHit")}

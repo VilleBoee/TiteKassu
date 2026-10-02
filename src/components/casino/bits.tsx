@@ -6,11 +6,22 @@ import { type Lamp } from "@/lib/casino/slots";
 
 const SUITS = { S: Spade, H: Heart, D: Diamond, C: Club } as const;
 
-export function PlayingCard({ card, down = false, small = false }: { card?: Card; down?: boolean; small?: boolean }) {
+export function PlayingCard({
+  card,
+  down = false,
+  small = false,
+  enter = false,
+}: {
+  card?: Card;
+  down?: boolean;
+  small?: boolean;
+  enter?: boolean;
+}) {
   const size = small ? "pcard pcard-sm" : "pcard";
+  const motion = enter ? "card-in" : "";
   if (down || !card) {
     return (
-      <div className={`${size} felt-surface relative shrink-0 rounded-md border border-gold-dim`} aria-hidden>
+      <div className={`${size} ${motion} felt-surface relative shrink-0 rounded-md border border-gold-dim`} aria-hidden>
         <span className="absolute inset-1 rounded-sm border border-gold/40" />
         <span className="absolute inset-2 rounded-sm border border-ivory/20" />
       </div>
@@ -20,7 +31,7 @@ export function PlayingCard({ card, down = false, small = false }: { card?: Card
   const Icon = SUITS[card.s];
   return (
     <div
-      className={`${size} relative shrink-0 rounded-md border border-line bg-ivory shadow-sm ${red ? "text-crimson" : "text-ink"}`}
+      className={`${size} ${motion} relative shrink-0 rounded-md border border-line bg-ivory shadow-sm ${red ? "text-crimson" : "text-ink"}`}
       role="img"
       aria-label={cardLabel(card)}
     >
