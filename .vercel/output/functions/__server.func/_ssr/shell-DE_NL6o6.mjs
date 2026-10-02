@@ -2,7 +2,7 @@ import { i as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime, b as Link, p as useRouterState } from "../_libs/@tanstack/react-router+[...].mjs";
 import { i as Sun, n as Volume2, o as ScrollText, s as Moon, t as VolumeX } from "../_libs/lucide-react.mjs";
 import { t as create } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/shell-CswMBeV8.js
+//#region node_modules/.nitro/vite/services/ssr/assets/shell-DE_NL6o6.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var ctx = null;
@@ -615,11 +615,15 @@ var phrases = [
 	["Tap a number, then choose the six-line.", "Napauta numeroa ja valitse kuuden linja."],
 	["Now a neighbor of ", "Nyt naapuri numerolle "],
 	["Six decks. The dealer stands on every 17, including soft. A natural pays three to two.", "Kuusi pakkaa. Jakaja jää jokaiseen 17:ään, myös pehmeään. Blackjack maksaa 3:2."],
-	["Three reels, one line through the middle. Hold a reel and it sits for the next paid spin.", "Kolme rullaa, yksi linja keskellä. Pidä rulla, niin se jää seuraavaan maksulliseen pyöräytykseen."],
+	["Three reels, one line through the middle. Hold a reel and it stays for one spin only.", "Kolme rullaa, yksi linja keskellä. Pidä rulla, niin se jää vain yhteen pyöräytykseen."],
 	["European wheel, thirty-seven pockets. Even-money bets lose on zero.", "Eurooppalainen pyörä, 37 taskua. Tasapanokset häviävät nollalle."],
 	["Blackjack pays 3 to 2, rounded to the nearest chip. Split once, same rank only. Split aces take one card and stand. Double any first two cards, including after a split. Insurance is half the original bet and pays 2 to 1.", "Blackjack maksaa 3:2, pyöristettynä lähimpään merkkiin. Jako kerran, vain sama arvo. Jaetut ässät saavat yhden kortin ja jäävät. Tuplaus kahdelle ensimmäiselle kortille, myös jaon jälkeen. Vakuutus on puolet alkuperäisestä panoksesta ja maksaa 2:1."],
 	["The dealer peeks on an ace or a ten. The shoe is reshuffled when fewer than 78 cards remain.", "Jakaja kurkkaa ässän tai kympin. Kenkä sekoitetaan uudelleen, kun kortteja on alle 78."],
-	["Only the center symbol of each reel counts. Holds clear after a win that beats the stake.", "Vain kunkin rullan keskimmäinen merkki lasketaan. Pidot poistuvat, jos voitto ylittää panoksen."],
+	["Only the center symbol of each reel counts. A hold lasts one spin, then every reel is free again.", "Vain kunkin rullan keskimmäinen merkki lasketaan. Pito kestää yhden pyöräytyksen, sitten rullat vapautuvat."],
+	["10 spins", "10 pyöräytystä"],
+	["25 spins", "25 pyöräytystä"],
+	["50 spins", "50 pyöräytystä"],
+	["Stop auto", "Pysäytä auto"],
 	["Straight 35 to 1. Split 17 to 1. Street 11 to 1. Corner 8 to 1. Six-line 5 to 1. Dozens and columns 2 to 1. Red, black, odd, even, and halves pay 1 to 1, and lose if the ball finds zero.", "Suora 35:1. Split 17:1. Street 11:1. Kulma 8:1. Kuuden linja 5:1. Tusinat ja kolumnit 2:1. Punainen, musta, pariton, parillinen ja puolikkaat maksavat 1:1 ja häviävät, jos pallo löytää nollan."],
 	["Column 1 is 1, 4, 7… Column 2 is 2, 5, 8… Column 3 is 3, 6, 9…", "Kolumni 1 on 1, 4, 7… Kolumni 2 on 2, 5, 8… Kolumni 3 on 3, 6, 9…"],
 	["Keys: H hit, S stand, D double, P split.", "Näppäimet: H lisää, S jää, D tuplaa, P jaa."],
@@ -630,6 +634,7 @@ var phrases = [
 	["Place a bet.", "Aseta panos."],
 	["Waiting for a wager.", "Odotetaan panosta."],
 	["Dealer plays", "Jakaja pelaa"],
+	["Dealing", "Jaetaan"],
 	["Your hand", "Sinun kätesi"],
 	["Insurance?", "Vakuutus?"],
 	["Clear bet", "Tyhjennä panos"],

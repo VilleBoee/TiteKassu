@@ -1,8 +1,8 @@
 import { i as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as Spade, c as Heart, d as Club, u as Diamond } from "../_libs/lucide-react.mjs";
-import { s as useI18n } from "./shell-CswMBeV8.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/use-reduced-motion-CGmAgD2K.js
+import { s as useI18n } from "./shell-DE_NL6o6.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/use-reduced-motion-DNYynpH8.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function randInt(n) {
@@ -111,17 +111,18 @@ var SUITS = {
 	D: Diamond,
 	C: Club
 };
-function PlayingCard({ card, down = false, small = false }) {
+function PlayingCard({ card, down = false, small = false, enter = false }) {
 	const size = small ? "pcard pcard-sm" : "pcard";
+	const motion = enter ? "card-in" : "";
 	if (down || !card) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: `${size} felt-surface relative shrink-0 rounded-md border border-gold-dim`,
+		className: `${size} ${motion} felt-surface relative shrink-0 rounded-md border border-gold-dim`,
 		"aria-hidden": true,
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "absolute inset-1 rounded-sm border border-gold/40" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "absolute inset-2 rounded-sm border border-ivory/20" })]
 	});
 	const red = card.s === "H" || card.s === "D";
 	const Icon = SUITS[card.s];
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: `${size} relative shrink-0 rounded-md border border-line bg-ivory shadow-sm ${red ? "text-crimson" : "text-ink"}`,
+		className: `${size} ${motion} relative shrink-0 rounded-md border border-line bg-ivory shadow-sm ${red ? "text-crimson" : "text-ink"}`,
 		role: "img",
 		"aria-label": cardLabel(card),
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

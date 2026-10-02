@@ -1,8 +1,8 @@
 import { i as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
-import { i as playCue, n as BrokeRack, o as useHouse, r as HouseShell, s as useI18n } from "./shell-CswMBeV8.mjs";
-import { a as PlayingCard, c as freshShoe, h as useReducedMotion, l as handTotal, n as GhostButton, o as ResultLine, r as GoldButton, s as RuleNote, t as DenomPicker, u as isBlackjack } from "./use-reduced-motion-CGmAgD2K.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/blackjack-CZbSKP4g.js
+import { i as playCue, n as BrokeRack, o as useHouse, r as HouseShell, s as useI18n } from "./shell-DE_NL6o6.mjs";
+import { a as PlayingCard, c as freshShoe, h as useReducedMotion, l as handTotal, n as GhostButton, o as ResultLine, r as GoldButton, s as RuleNote, t as DenomPicker, u as isBlackjack } from "./use-reduced-motion-DNYynpH8.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/blackjack-CWsTvs38.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function createTable() {
@@ -298,16 +298,22 @@ function BlackjackGame() {
 	const [table, setTable] = (0, import_react.useState)(() => createTable());
 	const [banner, setBanner] = (0, import_react.useState)("Place a bet.");
 	const [tone, setTone] = (0, import_react.useState)("idle");
-	const [shown, setShown] = (0, import_react.useState)(1);
+	const [view, setView] = (0, import_react.useState)({
+		players: [],
+		dealer: 0,
+		hole: false
+	});
 	const [busy, setBusy] = (0, import_react.useState)(false);
 	const tableRef = (0, import_react.useRef)(table);
 	const owed = (0, import_react.useRef)(null);
 	const timer = (0, import_react.useRef)(0);
-	const flush = (announce) => {
+	const gen = (0, import_react.useRef)(0);
+	const flushRef = (0, import_react.useRef)(() => {});
+	flushRef.current = (announce) => {
 		const due = owed.current;
 		if (!due) return;
 		owed.current = null;
-		window.clearInterval(timer.current);
+		window.clearTimeout(timer.current);
 		useHouse.getState().settle("blackjack", due.stake, due.back, due.note);
 		if (!announce) return;
 		setBusy(false);
@@ -323,49 +329,131 @@ function BlackjackGame() {
 			playCue("lose");
 		}
 	};
-	(0, import_react.useEffect)(() => () => flush(false), []);
-	function present(next) {
+	(0, import_react.useEffect)(() => () => {
+		gen.current += 1;
+		window.clearTimeout(timer.current);
+		flushRef.current(false);
+	}, []);
+	const runRef = (0, import_react.useRef)(() => {});
+	runRef.current = (next, kind) => {
+		const id = gen.current + 1;
+		gen.current = id;
+		const live = () => gen.current === id;
+		const pace = (ms) => new Promise((resolve) => {
+			timer.current = window.setTimeout(resolve, reduced ? 70 : ms);
+		});
+		if (next.phase === "done" && next.settlement) {
+			const stake = next.hands.reduce((sum, hand) => sum + hand.bet, 0) + next.insuranceBet;
+			owed.current = {
+				stake,
+				back: next.settlement.mainReturn + next.settlement.insuranceReturn,
+				note: next.settlement.note
+			};
+		}
 		tableRef.current = next;
 		setTable(next);
-		if (next.phase !== "done" || !next.settlement) {
-			setShown(1);
-			setBanner(next.phase === "insurance" ? "Insurance?" : "Your hand");
-			setTone("idle");
-			playCue("card");
-			return;
-		}
-		const stake = next.hands.reduce((sum, hand) => sum + hand.bet, 0) + next.insuranceBet;
-		const back = next.settlement.mainReturn + next.settlement.insuranceReturn;
-		owed.current = {
-			stake,
-			back,
-			note: next.settlement.note
-		};
-		const count = next.dealer.length;
-		if (reduced || count <= 2) {
-			setShown(count);
-			flush(true);
-			return;
-		}
 		setBusy(true);
-		setShown(2);
-		setBanner("Dealer plays");
 		setTone("idle");
-		playCue("card");
-		let n = 2;
-		timer.current = window.setInterval(() => {
-			n += 1;
-			setShown(n);
-			playCue("tick");
-			if (n >= count) flush(true);
-		}, 420);
+		const showHands = () => next.hands.map((hand) => hand.cards.length);
+		const finishIfLive = async () => {
+			let n = 2;
+			setBanner("Dealer plays");
+			setView({
+				players: showHands(),
+				dealer: Math.min(2, next.dealer.length),
+				hole: false
+			});
+			playCue("card");
+			while (n < next.dealer.length) {
+				await pace(440);
+				if (!live()) return;
+				n += 1;
+				setView({
+					players: showHands(),
+					dealer: n,
+					hole: false
+				});
+				playCue("tick");
+			}
+			await pace(560);
+			if (!live()) return;
+			flushRef.current(true);
+		};
+		(async () => {
+			if (kind === "deal") {
+				setBanner("Dealing");
+				setView({
+					players: [0],
+					dealer: 0,
+					hole: false
+				});
+				await pace(90);
+				if (!live()) return;
+				setView({
+					players: [1],
+					dealer: 0,
+					hole: false
+				});
+				playCue("card");
+				await pace(460);
+				if (!live()) return;
+				setView({
+					players: [1],
+					dealer: 1,
+					hole: false
+				});
+				playCue("card");
+				await pace(460);
+				if (!live()) return;
+				setView({
+					players: [2],
+					dealer: 1,
+					hole: false
+				});
+				playCue("card");
+				await pace(460);
+				if (!live()) return;
+				setView({
+					players: [2],
+					dealer: 1,
+					hole: true
+				});
+				playCue("card");
+				await pace(520);
+				if (!live()) return;
+				if (next.phase === "done") {
+					await finishIfLive();
+					return;
+				}
+				setBusy(false);
+				setBanner(next.phase === "insurance" ? "Insurance?" : "Your hand");
+				return;
+			}
+			setView({
+				players: showHands(),
+				dealer: 1,
+				hole: next.dealer.length > 1
+			});
+			playCue("card");
+			if (next.phase !== "done") {
+				setBusy(false);
+				setBanner(next.phase === "insurance" ? "Insurance?" : "Your hand");
+				return;
+			}
+			await pace(kind === "peek" ? 420 : 360);
+			if (!live()) return;
+			await finishIfLive();
+		})();
+	};
+	function present(next, kind) {
+		runRef.current(next, kind);
 	}
 	function onDeal(amount = wager) {
 		if (busy) return;
 		const ready = tableRef.current.phase === "done" ? clearHand(tableRef.current) : tableRef.current;
 		if (ready.phase !== "bet") return;
 		if (!useHouse.getState().stake(amount)) return;
-		present(deal(ready, amount));
+		present(deal(ready, amount), "deal");
 	}
 	function act(kind) {
 		if (busy) return;
@@ -378,7 +466,7 @@ function BlackjackGame() {
 				useHouse.getState().refund(extra);
 				return;
 			}
-			present(next);
+			present(next, "play");
 			return;
 		}
 		if (kind === "split") {
@@ -389,12 +477,12 @@ function BlackjackGame() {
 				useHouse.getState().refund(extra);
 				return;
 			}
-			present(next);
+			present(next, "play");
 			return;
 		}
 		const next = kind === "hit" ? hit(prev) : stand(prev);
 		if (next === prev) return;
-		present(next);
+		present(next, "play");
 	}
 	function insure(take) {
 		if (busy) return;
@@ -403,7 +491,7 @@ function BlackjackGame() {
 		if (take && !useHouse.getState().stake(cost)) return;
 		const next = resolveInsurance(prev, take);
 		if (next === prev && take) useHouse.getState().refund(cost);
-		if (next !== prev) present(next);
+		if (next !== prev) present(next, "peek");
 	}
 	(0, import_react.useEffect)(() => {
 		const onKey = (event) => {
@@ -421,8 +509,8 @@ function BlackjackGame() {
 		return () => window.removeEventListener("keydown", onKey);
 	}, [busy, wager]);
 	const phase = table.phase;
-	const dealerShown = phase === "done" ? table.dealer.slice(0, shown) : table.dealer.slice(0, 1);
-	const holeDown = phase === "player" || phase === "insurance";
+	const dealerUp = table.dealer.slice(0, view.dealer);
+	const holeDown = view.hole && table.dealer.length > view.dealer;
 	const active = table.hands[table.active];
 	const scoreOf = (cards) => {
 		const { total, soft } = handTotal(cards);
@@ -430,7 +518,7 @@ function BlackjackGame() {
 		if (soft && total !== 21) return t("bjSoft", { n: total });
 		return t("bjTotal", { n: total });
 	};
-	const dealerTotal = !holeDown && dealerShown.length >= 2 ? scoreOf(dealerShown) : "";
+	const dealerTotal = !holeDown && dealerUp.length >= 2 ? scoreOf(dealerUp) : "";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 			className: "text-xs tracking-[0.2em] text-accent uppercase",
@@ -454,8 +542,14 @@ function BlackjackGame() {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "mt-2 flex gap-2",
 					children: [
-						dealerShown.map((card, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlayingCard, { card }, `${card.r}${card.s}${index}`)),
-						holeDown && table.dealer.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlayingCard, { down: true }) : null,
+						dealerUp.map((card, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlayingCard, {
+							card,
+							enter: true
+						}, `${card.r}${card.s}${index}`)),
+						holeDown ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlayingCard, {
+							down: true,
+							enter: true
+						}) : null,
 						table.dealer.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlayingCard, { down: true }) : null
 					]
 				}),
@@ -465,22 +559,24 @@ function BlackjackGame() {
 						className: "text-sm text-ivory/80",
 						children: t("bjWait")
 					}) : table.hands.map((hand, index) => {
-						const live = phase === "player" && index === table.active;
+						const live = phase === "player" && index === table.active && !busy;
+						const shownCards = hand.cards.slice(0, view.players[index] ?? 0);
 						return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: `rounded-md p-2 ${live ? "ring-2 ring-gold" : ""}`,
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 								className: "text-xs tracking-[0.16em] text-ivory/70 uppercase",
 								children: [
 									table.hands.length > 1 ? t(index === 0 ? "bjLeft" : "bjRight") : t("you"),
+									shownCards.length ? ` · ${scoreOf(shownCards)}` : "",
 									" · ",
-									scoreOf(hand.cards),
-									" ·",
-									" ",
 									t("betOf", { n: fmt(hand.bet) })
 								]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: "mt-2 flex flex-wrap gap-2",
-								children: hand.cards.map((card, cardIndex) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlayingCard, { card }, `${card.r}${card.s}${cardIndex}`))
+								children: shownCards.map((card, cardIndex) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlayingCard, {
+									card,
+									enter: true
+								}, `${card.r}${card.s}${cardIndex}`))
 							})]
 						}, index);
 					})
@@ -494,7 +590,7 @@ function BlackjackGame() {
 				tone
 			})
 		}),
-		phase === "bet" || phase === "done" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		phase === "bet" || phase === "done" && !busy ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "mt-5 space-y-4",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mb-2 text-xs tracking-wide text-muted uppercase",
@@ -523,7 +619,7 @@ function BlackjackGame() {
 				})]
 			})]
 		}) : null,
-		phase === "insurance" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		phase === "insurance" && !busy ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "mt-5 flex flex-wrap gap-2",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(GoldButton, {
 				disabled: busy || chips < insuranceCost(table),
@@ -535,7 +631,7 @@ function BlackjackGame() {
 				children: t("bjDecline")
 			})]
 		}) : null,
-		phase === "player" && active ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		phase === "player" && active && !busy ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "mt-5 flex flex-wrap gap-2",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(GoldButton, {

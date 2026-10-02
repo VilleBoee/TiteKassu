@@ -2,8 +2,8 @@ import { i as __toESM, n as __exportAll } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime, _ as lazyRouteComponent, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, v as createFileRoute, x as useRouter, y as createRootRoute } from "../_libs/@tanstack/react-router+[...].mjs";
 import { r as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DHn6Grgs.js
-var router_DHn6Grgs_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
+//#region node_modules/.nitro/vite/services/ssr/assets/router-BpbouTsd.js
+var router_BpbouTsd_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
@@ -297,7 +297,7 @@ function PreviewHostBridge() {
 	}, [router]);
 	return null;
 }
-var styles_default = "/TiteKassu/assets/styles-BhmVtN7q.css";
+var styles_default = "/TiteKassu/assets/styles-DPM7FPm0.css";
 var APP_NAME = "TiteKassu";
 var publicBase = "/TiteKassu/";
 var Route$5 = createRootRoute({
@@ -362,24 +362,24 @@ var Route$5 = createRootRoute({
 		] })]
 	})
 });
-var $$splitComponentImporter$4 = () => import("./routes-CakSpLxY.mjs");
+var $$splitComponentImporter$4 = () => import("./routes-BVqXPZ_2.mjs");
 var Route$4 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
-var $$splitComponentImporter$3 = () => import("./blackjack-CZbSKP4g.mjs");
+var $$splitComponentImporter$3 = () => import("./blackjack-CWsTvs38.mjs");
 var Route$3 = createFileRoute("/blackjack")({
 	head: () => ({ meta: [{ title: "Blackjack · TiteKassu" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-var $$splitComponentImporter$2 = () => import("./poker-00qUF2CT.mjs");
+var $$splitComponentImporter$2 = () => import("./poker-jZ2th5zg.mjs");
 var Route$2 = createFileRoute("/poker")({
 	head: () => ({ meta: [{ title: "Texas Hold'em · TiteKassu" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./roulette-CDZwyVRf.mjs");
+var $$splitComponentImporter$1 = () => import("./roulette-CaqpELjL.mjs");
 var Route$1 = createFileRoute("/roulette")({
 	head: () => ({ meta: [{ title: "Roulette · TiteKassu" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
-var $$splitComponentImporter = () => import("./slots-D9O3u8TE.mjs");
+var $$splitComponentImporter = () => import("./slots-CYnes1b8.mjs");
 var Route = createFileRoute("/slots")({
 	head: () => ({ meta: [{ title: "Fruit machine · TiteKassu" }] }),
 	component: lazyRouteComponent($$splitComponentImporter, "component")
@@ -425,4 +425,4 @@ function getRouter() {
 	});
 }
 //#endregion
-export { getRouter, router_DHn6Grgs_exports as t };
+export { getRouter, router_BpbouTsd_exports as t };
