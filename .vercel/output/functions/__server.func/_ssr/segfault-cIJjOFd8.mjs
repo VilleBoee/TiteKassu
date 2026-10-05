@@ -1,8 +1,8 @@
 import { i as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
-import { S as useI18n, d as RuleNote, g as playCue, i as DenomPicker, n as BrokeRack, o as GoldButton, r as Console, s as HouseShell, u as ResultLine, v as randInt, x as useHouse } from "./shell-Bl0y8KZI.mjs";
+import { S as useI18n, a as GhostButton, d as RuleNote, g as playCue, i as DenomPicker, n as BrokeRack, o as GoldButton, r as Console, s as HouseShell, u as ResultLine, v as randInt, x as useHouse } from "./shell-Bl0y8KZI.mjs";
 import { t as useReducedMotion } from "./use-reduced-motion-CCumc2IX.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/segfault-CHjUh4rU.js
+//#region node_modules/.nitro/vite/services/ssr/assets/segfault-cIJjOFd8.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var PAY_SYMS = [
@@ -459,6 +459,12 @@ var BETS = [
 	50,
 	100
 ];
+var AUTO = [
+	10,
+	25,
+	50,
+	100
+];
 var PAY_ROWS = [
 	{
 		key: "sfPayBit",
@@ -564,6 +570,24 @@ function Glyph({ sym }) {
 		children: GLYPH[sym]
 	});
 }
+function beat(frame, reduced) {
+	if (reduced) return 80;
+	if (frame.kind === "mine") return 1200;
+	if (frame.kind === "blast" || frame.kind === "shell") return 1080;
+	if (frame.kind === "win") return 960;
+	if (frame.banner === "open") return 840;
+	return 720;
+}
+function veilFor(frame) {
+	if (!frame) return "";
+	if (frame.banner === "cap") return "sf-veil-cap";
+	if (frame.kind === "blast") return "sf-veil-blast";
+	if (frame.kind === "mine") return "sf-veil-mine";
+	if (frame.mode === "shell") return "sf-veil-shell";
+	if (frame.kind === "win") return "sf-veil-win";
+	if (frame.banner === "open") return "sf-veil-open";
+	return "";
+}
 function tone(sym) {
 	if (sym === "bug") return "border-crimson bg-crimson/25 text-ivory";
 	if (sym === "root") return "border-phosphor bg-phosphor/15 text-phosphor";
@@ -574,7 +598,7 @@ function tone(sym) {
 }
 function SegfaultGame() {
 	const reduced = useReducedMotion();
-	const { t, fmt } = useI18n();
+	const { t, tx, fmt } = useI18n();
 	const chips = useHouse((s) => s.chips);
 	const [bet, setBet] = (0, import_react.useState)(25);
 	const [frames, setFrames] = (0, import_react.useState)([]);
@@ -583,11 +607,25 @@ function SegfaultGame() {
 	const [banner, setBanner] = (0, import_react.useState)("idle");
 	const [bannerN, setBannerN] = (0, import_react.useState)(3);
 	const [toneName, setToneName] = (0, import_react.useState)("idle");
+	const [autoLeft, setAutoLeft] = (0, import_react.useState)(0);
 	const owed = (0, import_react.useRef)(null);
-	const flush = (announce) => {
+	const autoRef = (0, import_react.useRef)(0);
+	const gapTimer = (0, import_react.useRef)(0);
+	const betRef = (0, import_react.useRef)(bet);
+	const runningRef = (0, import_react.useRef)(false);
+	betRef.current = bet;
+	const stopAuto = () => {
+		autoRef.current = 0;
+		setAutoLeft(0);
+		window.clearTimeout(gapTimer.current);
+	};
+	const runRef = (0, import_react.useRef)(() => false);
+	const flushRef = (0, import_react.useRef)(() => {});
+	flushRef.current = (announce) => {
 		const due = owed.current;
 		if (!due) return;
 		owed.current = null;
+		runningRef.current = false;
 		useHouse.getState().settle("segfault", due.stake, due.back, due.note);
 		if (!announce) return;
 		setRunning(false);
@@ -601,8 +639,49 @@ function SegfaultGame() {
 			setToneName("lose");
 			playCue("lose");
 		}
+		if (autoRef.current > 1) {
+			autoRef.current -= 1;
+			setAutoLeft(autoRef.current);
+			const gap = 100 + randInt(151);
+			gapTimer.current = window.setTimeout(() => {
+				if (autoRef.current <= 0) return;
+				if (!runRef.current()) stopAuto();
+			}, gap);
+		} else if (autoRef.current === 1) stopAuto();
 	};
-	(0, import_react.useEffect)(() => () => flush(false), []);
+	runRef.current = () => {
+		if (runningRef.current) return false;
+		const stake = betRef.current;
+		if (!useHouse.getState().stake(stake)) return false;
+		const script = resolveSpin(stake);
+		const total = script[script.length - 1]?.total ?? 0;
+		const shell = script.some((frame) => frame.mode === "shell");
+		owed.current = {
+			stake,
+			back: total,
+			note: shell ? "Root shell" : "Segfault"
+		};
+		runningRef.current = true;
+		setFrames(script);
+		setCursor(0);
+		setToneName("idle");
+		setBanner("idle");
+		setBannerN(3);
+		setRunning(true);
+		playCue("spin");
+		return true;
+	};
+	function startAuto(count) {
+		if (autoRef.current || runningRef.current) return;
+		autoRef.current = count;
+		setAutoLeft(count);
+		if (!runRef.current()) stopAuto();
+	}
+	(0, import_react.useEffect)(() => () => {
+		window.clearTimeout(gapTimer.current);
+		autoRef.current = 0;
+		flushRef.current(false);
+	}, []);
 	(0, import_react.useEffect)(() => {
 		if (!running) return;
 		const frame = frames[cursor];
@@ -611,11 +690,13 @@ function SegfaultGame() {
 		setBannerN(frame.kind === "done" ? frame.total : frame.bannerN);
 		if (frame.banner === "win" || frame.banner === "shellWin" || frame.banner === "cap") setToneName("win");
 		else if (cursor < frames.length - 1) setToneName("idle");
+		if (frame.kind === "blast" || frame.kind === "mine" || frame.banner === "open") playCue("tick");
+		else if (frame.kind === "shell") playCue("chip");
 		if (cursor >= frames.length - 1) {
-			flush(true);
+			flushRef.current(true);
 			return;
 		}
-		const id = window.setTimeout(() => setCursor((value) => value + 1), reduced ? 70 : 480);
+		const id = window.setTimeout(() => setCursor((value) => value + 1), beat(frame, reduced));
 		return () => window.clearTimeout(id);
 	}, [
 		running,
@@ -624,46 +705,41 @@ function SegfaultGame() {
 		reduced
 	]);
 	function run() {
-		if (running) return;
-		if (!useHouse.getState().stake(bet)) return;
-		const script = resolveSpin(bet);
-		const total = script[script.length - 1]?.total ?? 0;
-		const shell = script.some((frame) => frame.mode === "shell");
-		owed.current = {
-			stake: bet,
-			back: total,
-			note: shell ? "Root shell" : "Segfault"
-		};
-		setFrames(script);
-		setCursor(0);
-		setToneName("idle");
-		setBanner("idle");
-		setBannerN(3);
-		setRunning(true);
-		playCue("spin");
+		if (autoRef.current) return;
+		runRef.current();
 	}
+	const autoOn = autoLeft > 0;
 	const frame = frames[cursor];
+	const prev = cursor > 0 ? frames[cursor - 1] : void 0;
 	const lit = new Set((frame?.lit ?? []).map((hit) => `${hit.c}:${hit.r}`));
+	const veil = reduced ? "" : veilFor(frame);
 	const line = banner === "win" ? t("sfWin", { n: fmt(bannerN) }) : banner === "blast" ? t("sfBlast", { n: bannerN }) : banner === "mine" ? t("sfMine") : banner === "shell" ? t("sfShell", { n: bannerN }) : banner === "shellWin" ? t("sfShellWin", { n: fmt(bannerN) }) : banner === "cap" ? t("sfCap", { n: fmt(bannerN) }) : banner === "none" ? t("sfNone") : banner === "open" ? t("sfOpen", { n: bannerN }) : t("sfIdle");
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Console, {
 		pid: "05",
 		unit: "rack.segfault",
 		title: t("gameSegfault"),
 		blurb: t("sfIntro"),
-		live: running,
+		live: running || autoOn,
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "term-stage p-3",
+				className: "term-stage relative overflow-hidden p-3",
 				children: [
+					veil ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: `sf-veil ${veil}`,
+						"aria-hidden": true
+					}, cursor) : null,
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "mb-3 flex flex-wrap items-center justify-between gap-2 font-mono text-xs tracking-wide text-term-muted uppercase",
+						className: "relative mb-3 flex flex-wrap items-center justify-between gap-2 font-mono text-xs tracking-wide text-term-muted uppercase",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: t("sfRows", { n: frame?.open ?? 3 }) }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: `num text-phosphor ${frame && frame.mult > 1 && frame.kind === "blast" ? "sf-mult" : ""}`,
+								children: t("sfMult", { n: frame?.mult ?? 1 })
+							}, frame?.mult ?? 1),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "num text-phosphor",
 								children: t("sfWays", { n: fmt(waysFor(frame?.open ?? 3)) })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: t("sfMult", { n: frame?.mult ?? 1 }) })
+							})
 						]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -671,7 +747,7 @@ function SegfaultGame() {
 						children: Array.from({ length: 6 }, (_, c) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["0", c + 1] }, c))
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "grid grid-cols-6 gap-1",
+						className: "relative grid grid-cols-6 gap-1",
 						"aria-busy": running,
 						children: Array.from({ length: 6 }, (_, c) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "grid gap-1",
@@ -679,23 +755,33 @@ function SegfaultGame() {
 								if (frame?.mode === "shell" && r < 3) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "h-2" }, r);
 								const cell = frame?.grid[c]?.[r] ?? { sym: IDLE[c]?.[r] ?? "nop" };
 								const locked = frame?.mode !== "shell" && r < 6 - (frame?.open ?? 3);
+								const wasLocked = Boolean(prev && prev.mode !== "shell" && frame?.mode !== "shell" && r < 6 - prev.open);
 								const on = lit.has(`${c}:${r}`);
-								const falling = Boolean(frame && frame.kind === "drop" && !locked);
+								let fx = "";
+								if (!reduced && frame && !locked) {
+									if (frame.kind === "blast" && on) fx = "sf-blast";
+									else if (frame.kind === "mine" && on) fx = "sf-mine";
+									else if ((frame.kind === "win" || frame.banner === "cap") && on) fx = "sf-win";
+									else if (frame.kind === "shell" && (cell.cash || cell.sym === "root")) fx = cell.hot ? "sf-hot" : "sf-pop";
+									else if (wasLocked) fx = "sf-unlock";
+									else if (frame.kind === "drop") fx = "sf-fall";
+								}
 								const ring = frame?.kind === "blast" && on ? "ring-2 ring-crimson" : on ? "ring-2 ring-phosphor" : "";
 								return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: `relative flex aspect-square items-center justify-center rounded-sm border ${locked ? "border-term-line bg-ink/70" : tone(cell.sym)} ${ring} ${cell.hot ? "ring-2 ring-ivory" : ""} ${falling ? "sf-fall" : ""}`,
+									className: `sf-cell relative flex aspect-square items-center justify-center rounded-sm border ${locked ? "border-term-line bg-ink/70" : tone(cell.sym)} ${ring} ${cell.hot ? "ring-2 ring-ivory" : ""} ${fx}`,
+									style: fx ? { animationDelay: `${c * 28 + (5 - r) * 16}ms` } : void 0,
 									children: locked ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "h-px w-5 bg-term-muted" }) : cell.cash ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "num text-xs leading-none",
 										children: cell.cash
 									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Glyph, { sym: cell.sym })
-								}, `${cursor}-${r}`);
+								}, fx ? `${cursor}-${r}` : r);
 							})
 						}, c))
 					}),
 					frame?.mode === "shell" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						className: "mt-2 text-center font-mono text-xs tracking-wide text-phosphor uppercase",
+						className: "relative mt-2 text-center font-mono text-xs tracking-wide text-phosphor uppercase sf-mult",
 						children: t("sfShell", { n: frame.shellLeft ?? 0 })
-					}) : null
+					}, frame.shellLeft) : null
 				]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -714,13 +800,31 @@ function SegfaultGame() {
 					value: bet,
 					onChange: setBet,
 					denoms: BETS,
-					disabled: running,
+					disabled: running || autoOn,
 					label: "Bet size"
-				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GoldButton, {
-					className: "min-w-32 px-8",
-					disabled: running || chips < bet,
-					onClick: run,
-					children: running ? t("sfRunning") : t("sfRun", { n: fmt(bet) })
+				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex flex-col items-stretch gap-2 sm:items-end",
+					children: [autoOn ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(GoldButton, {
+						className: "min-w-32 px-8",
+						onClick: stopAuto,
+						children: [
+							tx("Stop auto"),
+							" · ",
+							autoLeft
+						]
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GoldButton, {
+						className: "min-w-32 px-8",
+						disabled: running || chips < bet,
+						onClick: run,
+						children: running ? t("sfRunning") : t("sfRun", { n: fmt(bet) })
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex flex-wrap gap-2",
+						children: AUTO.map((count) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GhostButton, {
+							disabled: autoOn || running || chips < bet,
+							onClick: () => startAuto(count),
+							children: tx(`${count} spins`)
+						}, count))
+					})]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrokeRack, {}),

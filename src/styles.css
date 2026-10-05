@@ -123,8 +123,69 @@
   .card-in {
     animation: card-in 320ms cubic-bezier(0.16, 0.84, 0.32, 1);
   }
+  .sf-cell {
+    transition:
+      background-color 360ms ease,
+      border-color 360ms ease,
+      box-shadow 360ms ease,
+      opacity 320ms ease;
+  }
   .sf-fall {
-    animation: sf-fall 280ms cubic-bezier(0.16, 0.84, 0.32, 1);
+    animation: sf-fall 420ms cubic-bezier(0.16, 0.84, 0.32, 1) both;
+  }
+  .sf-win {
+    animation: sf-win 900ms ease both;
+  }
+  .sf-blast {
+    animation: sf-blast 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .sf-mine {
+    animation: sf-mine 1000ms ease both;
+  }
+  .sf-pop {
+    animation: sf-pop 640ms cubic-bezier(0.16, 0.84, 0.32, 1) both;
+  }
+  .sf-hot {
+    animation: sf-hot 1000ms ease both;
+  }
+  .sf-unlock {
+    animation: sf-unlock 720ms ease both;
+  }
+  .sf-mult {
+    display: inline-block;
+    animation: sf-pop 640ms cubic-bezier(0.16, 0.84, 0.32, 1) both;
+  }
+  .sf-veil {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+  }
+  .sf-veil-blast {
+    background: radial-gradient(circle at 50% 62%, color-mix(in oklab, var(--color-crimson) 42%, transparent), transparent 68%);
+    animation: sf-flash 960ms ease both;
+  }
+  .sf-veil-mine {
+    background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-crimson) 32%, transparent), transparent);
+    animation: sf-sweep 1100ms ease both;
+  }
+  .sf-veil-win {
+    background: radial-gradient(circle at 50% 70%, color-mix(in oklab, var(--color-phosphor) 30%, transparent), transparent 70%);
+    animation: sf-flash 960ms ease both;
+  }
+  .sf-veil-shell {
+    background: radial-gradient(circle at 50% 42%, color-mix(in oklab, var(--color-phosphor) 22%, transparent), transparent 72%);
+    box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--color-phosphor) 65%, transparent);
+    animation: sf-flash 1100ms ease both;
+  }
+  .sf-veil-open {
+    background: linear-gradient(180deg, color-mix(in oklab, var(--color-phosphor) 24%, transparent), transparent 58%);
+    animation: sf-flash 840ms ease both;
+  }
+  .sf-veil-cap {
+    background: color-mix(in oklab, var(--color-alert) 18%, transparent);
+    animation: sf-flash 840ms ease both;
   }
   .term-shell {
     overflow: hidden;
@@ -185,11 +246,128 @@
 }
 
 @keyframes sf-fall {
-  from {
-    transform: translateY(-40%);
+  0% {
+    opacity: 0;
+    transform: translateY(-68%) scale(0.88);
   }
-  to {
+  68% {
+    opacity: 1;
+    transform: translateY(5%) scale(1.03);
+  }
+  100% {
+    opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes sf-win {
+  0% {
+    transform: scale(1);
+  }
+  38% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 6px color-mix(in oklab, var(--color-phosphor) 42%, transparent);
+  }
+  100% {
+    transform: none;
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes sf-blast {
+  0% {
+    transform: scale(0.72);
+    filter: brightness(1.8);
+  }
+  32% {
+    transform: scale(1.14) rotate(-5deg);
+  }
+  58% {
+    transform: scale(0.94) rotate(3deg);
+  }
+  100% {
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes sf-mine {
+  0% {
+    opacity: 0.35;
+    transform: translateX(-14%) scale(0.9);
+  }
+  42% {
+    opacity: 1;
+    transform: translateX(0) scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sf-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(-22%) scale(0.62);
+  }
+  62% {
+    opacity: 1;
+    transform: translateY(3%) scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sf-hot {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 7px color-mix(in oklab, var(--color-ivory) 50%, transparent);
+  }
+}
+
+@keyframes sf-unlock {
+  0% {
+    opacity: 0.15;
+    transform: scaleY(0.35);
+    filter: brightness(1.7);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes sf-flash {
+  0% {
+    opacity: 0;
+  }
+  22% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sf-sweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-28%);
+  }
+  28% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(28%);
   }
 }
 

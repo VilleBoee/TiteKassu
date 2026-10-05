@@ -2,8 +2,8 @@ import { i as __toESM, n as __exportAll } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime, _ as lazyRouteComponent, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, v as createFileRoute, x as useRouter, y as createRootRoute } from "../_libs/@tanstack/react-router+[...].mjs";
 import { r as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CEdGSuU6.js
-var router_CEdGSuU6_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
+//#region node_modules/.nitro/vite/services/ssr/assets/router-XdsyZSd7.js
+var router_XdsyZSd7_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
@@ -297,7 +297,7 @@ function PreviewHostBridge() {
 	}, [router]);
 	return null;
 }
-var styles_default = "/TiteKassu/assets/styles-PlCxL_eM.css";
+var styles_default = "/TiteKassu/assets/styles-mbuDQv1U.css";
 var APP_NAME = "TiteKassu";
 var publicBase = "/TiteKassu/";
 var Route$6 = createRootRoute({
@@ -379,7 +379,7 @@ var Route$2 = createFileRoute("/roulette")({
 	head: () => ({ meta: [{ title: "Roulette · TiteKassu" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./segfault-CHjUh4rU.mjs");
+var $$splitComponentImporter$1 = () => import("./segfault-cIJjOFd8.mjs");
 var Route$1 = createFileRoute("/segfault")({
 	head: () => ({ meta: [{ title: "Segfault · TiteKassu" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$1, "component")
@@ -435,4 +435,4 @@ function getRouter() {
 	});
 }
 //#endregion
-export { getRouter, router_CEdGSuU6_exports as t };
+export { getRouter, router_XdsyZSd7_exports as t };
