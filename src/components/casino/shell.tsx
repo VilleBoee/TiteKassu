@@ -6,18 +6,20 @@ import { BUY_IN, useHouse, type GameId } from "@/lib/casino/bank";
 import { useI18n } from "@/lib/casino/i18n";
 import { usePrefs } from "@/lib/casino/prefs";
 
-const NAV: { to: "/" | "/slots" | "/blackjack" | "/roulette" | "/poker"; key: "navSlots" | "navBlackjack" | "navRoulette" | "navPoker" }[] = [
+const NAV: { to: "/" | "/slots" | "/blackjack" | "/roulette" | "/poker" | "/segfault"; key: "navSlots" | "navBlackjack" | "navRoulette" | "navPoker" | "navSegfault" }[] = [
   { to: "/slots", key: "navSlots" },
   { to: "/blackjack", key: "navBlackjack" },
   { to: "/roulette", key: "navRoulette" },
   { to: "/poker", key: "navPoker" },
+  { to: "/segfault", key: "navSegfault" },
 ];
 
-const GAME_KEY: Record<GameId, "gameSlots" | "gameBlackjack" | "gameRoulette" | "gamePoker" | "gameHouse"> = {
+const GAME_KEY: Record<GameId, "gameSlots" | "gameBlackjack" | "gameRoulette" | "gamePoker" | "gameSegfault" | "gameHouse"> = {
   slots: "gameSlots",
   blackjack: "gameBlackjack",
   roulette: "gameRoulette",
   poker: "gamePoker",
+  segfault: "gameSegfault",
   house: "gameHouse",
 };
 

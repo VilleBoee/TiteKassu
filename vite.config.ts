@@ -195,6 +195,7 @@ export default defineConfig(({ command, isPreview }) => ({
               { path: "/blackjack" },
               { path: "/roulette" },
               { path: "/poker" },
+              { path: "/segfault" },
             ],
           }
         : undefined,

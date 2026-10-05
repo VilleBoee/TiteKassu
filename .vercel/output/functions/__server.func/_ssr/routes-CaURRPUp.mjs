@@ -1,7 +1,7 @@
 import { S as require_jsx_runtime, b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { a as Spade, d as Club, f as Cherry, l as Dices } from "../_libs/lucide-react.mjs";
-import { r as HouseShell, s as useI18n, t as BUY_IN } from "./shell-DE_NL6o6.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BVqXPZ_2.js
+import { b as Cherry, g as Dices, s as Spade, v as Cpu, y as Club } from "../_libs/lucide-react.mjs";
+import { r as HouseShell, s as useI18n, t as BUY_IN } from "./shell-bdhmSiAn.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CaURRPUp.js
 var import_jsx_runtime = require_jsx_runtime();
 var ROOMS = [
 	{
@@ -31,6 +31,13 @@ var ROOMS = [
 		title: "gamePoker",
 		line: "roomPoker",
 		icon: Club
+	},
+	{
+		to: "/segfault",
+		kicker: "05",
+		title: "gameSegfault",
+		line: "roomSegfault",
+		icon: Cpu
 	}
 ];
 function Home() {

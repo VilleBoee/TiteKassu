@@ -1,9 +1,9 @@
 import { i as __toESM, n as __exportAll } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime, _ as lazyRouteComponent, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, v as createFileRoute, x as useRouter, y as createRootRoute } from "../_libs/@tanstack/react-router+[...].mjs";
-import { r as TriangleAlert } from "../_libs/lucide-react.mjs";
+import { i as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-C_8Eapm1.js
-var router_C_8Eapm1_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
+//#region node_modules/.nitro/vite/services/ssr/assets/router-TUsSN1y-.js
+var router_TUsSN1y__exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
@@ -297,10 +297,10 @@ function PreviewHostBridge() {
 	}, [router]);
 	return null;
 }
-var styles_default = "/TiteKassu/assets/styles-DPM7FPm0.css";
+var styles_default = "/assets/styles-Er3ml9mY.css";
 var APP_NAME = "TiteKassu";
-var publicBase = "/TiteKassu/";
-var Route$5 = createRootRoute({
+var publicBase = "/";
+var Route$6 = createRootRoute({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -362,58 +362,68 @@ var Route$5 = createRootRoute({
 		] })]
 	})
 });
-var $$splitComponentImporter$4 = () => import("./routes-BVqXPZ_2.mjs");
-var Route$4 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
-var $$splitComponentImporter$3 = () => import("./blackjack-CWsTvs38.mjs");
-var Route$3 = createFileRoute("/blackjack")({
+var $$splitComponentImporter$5 = () => import("./routes-CaURRPUp.mjs");
+var Route$5 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
+var $$splitComponentImporter$4 = () => import("./blackjack-NeLk6fSN.mjs");
+var Route$4 = createFileRoute("/blackjack")({
 	head: () => ({ meta: [{ title: "Blackjack · TiteKassu" }] }),
+	component: lazyRouteComponent($$splitComponentImporter$4, "component")
+});
+var $$splitComponentImporter$3 = () => import("./poker-BL207uth.mjs");
+var Route$3 = createFileRoute("/poker")({
+	head: () => ({ meta: [{ title: "Texas Hold'em · TiteKassu" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-var $$splitComponentImporter$2 = () => import("./poker-jZ2th5zg.mjs");
-var Route$2 = createFileRoute("/poker")({
-	head: () => ({ meta: [{ title: "Texas Hold'em · TiteKassu" }] }),
+var $$splitComponentImporter$2 = () => import("./roulette-BBdukU7I.mjs");
+var Route$2 = createFileRoute("/roulette")({
+	head: () => ({ meta: [{ title: "Roulette · TiteKassu" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./roulette-7X3J8Hu-.mjs");
-var Route$1 = createFileRoute("/roulette")({
-	head: () => ({ meta: [{ title: "Roulette · TiteKassu" }] }),
+var $$splitComponentImporter$1 = () => import("./segfault-B62yZaG3.mjs");
+var Route$1 = createFileRoute("/segfault")({
+	head: () => ({ meta: [{ title: "Segfault · TiteKassu" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
-var $$splitComponentImporter = () => import("./slots-CYnes1b8.mjs");
+var $$splitComponentImporter = () => import("./slots-Ix_u7K-_.mjs");
 var Route = createFileRoute("/slots")({
 	head: () => ({ meta: [{ title: "Fruit machine · TiteKassu" }] }),
 	component: lazyRouteComponent($$splitComponentImporter, "component")
 });
 var rootRouteChildren = {
-	IndexRoute: Route$4.update({
+	IndexRoute: Route$5.update({
 		id: "/",
 		path: "/",
-		getParentRoute: () => Route$5
+		getParentRoute: () => Route$6
 	}),
-	BlackjackRoute: Route$3.update({
+	BlackjackRoute: Route$4.update({
 		id: "/blackjack",
 		path: "/blackjack",
-		getParentRoute: () => Route$5
+		getParentRoute: () => Route$6
 	}),
-	PokerRoute: Route$2.update({
+	PokerRoute: Route$3.update({
 		id: "/poker",
 		path: "/poker",
-		getParentRoute: () => Route$5
+		getParentRoute: () => Route$6
 	}),
-	RouletteRoute: Route$1.update({
+	RouletteRoute: Route$2.update({
 		id: "/roulette",
 		path: "/roulette",
-		getParentRoute: () => Route$5
+		getParentRoute: () => Route$6
+	}),
+	SegfaultRoute: Route$1.update({
+		id: "/segfault",
+		path: "/segfault",
+		getParentRoute: () => Route$6
 	}),
 	SlotsRoute: Route.update({
 		id: "/slots",
 		path: "/slots",
-		getParentRoute: () => Route$5
+		getParentRoute: () => Route$6
 	})
 };
-var routeTree = Route$5._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$6._addFileChildren(rootRouteChildren)._addFileTypes();
 function basepath() {
-	const trimmed = "/TiteKassu/".replace(/\/$/, "");
+	const trimmed = "/".replace(/\/$/, "");
 	if (!trimmed || trimmed === "/") return void 0;
 	return trimmed;
 }
@@ -425,4 +435,4 @@ function getRouter() {
 	});
 }
 //#endregion
-export { getRouter, router_C_8Eapm1_exports as t };
+export { getRouter, router_TUsSN1y__exports as t };

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Cherry, Club, Dices, Spade } from "lucide-react";
+import { Cherry, Club, Cpu, Dices, Spade } from "lucide-react";
 import { HouseShell } from "@/components/casino/shell";
 import { BUY_IN } from "@/lib/casino/bank";
 import { useI18n, type CopyKey } from "@/lib/casino/i18n";
@@ -8,11 +8,12 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const ROOMS: { to: "/slots" | "/blackjack" | "/roulette" | "/poker"; kicker: string; title: CopyKey; line: CopyKey; icon: typeof Cherry }[] = [
+const ROOMS: { to: "/slots" | "/blackjack" | "/roulette" | "/poker" | "/segfault"; kicker: string; title: CopyKey; line: CopyKey; icon: typeof Cherry }[] = [
   { to: "/slots", kicker: "01", title: "gameSlots", line: "roomSlots", icon: Cherry },
   { to: "/blackjack", kicker: "02", title: "gameBlackjack", line: "roomBlackjack", icon: Spade },
   { to: "/roulette", kicker: "03", title: "gameRoulette", line: "roomRoulette", icon: Dices },
   { to: "/poker", kicker: "04", title: "gamePoker", line: "roomPoker", icon: Club },
+  { to: "/segfault", kicker: "05", title: "gameSegfault", line: "roomSegfault", icon: Cpu },
 ];
 
 function Home() {

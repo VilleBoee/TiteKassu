@@ -82,6 +82,98 @@ var createLucideIcon = (iconName, iconNode) => {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Binary = createLucideIcon("binary", [
+	["rect", {
+		x: "14",
+		y: "14",
+		width: "4",
+		height: "6",
+		rx: "2",
+		key: "p02svl"
+	}],
+	["rect", {
+		x: "6",
+		y: "4",
+		width: "4",
+		height: "6",
+		rx: "2",
+		key: "xm4xkj"
+	}],
+	["path", {
+		d: "M6 20h4",
+		key: "1i6q5t"
+	}],
+	["path", {
+		d: "M14 10h4",
+		key: "ru81e7"
+	}],
+	["path", {
+		d: "M6 14h2v6",
+		key: "16z9wg"
+	}],
+	["path", {
+		d: "M14 4h2v6",
+		key: "1idq9u"
+	}]
+]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Bug = createLucideIcon("bug", [
+	["path", {
+		d: "m8 2 1.88 1.88",
+		key: "fmnt4t"
+	}],
+	["path", {
+		d: "M14.12 3.88 16 2",
+		key: "qol33r"
+	}],
+	["path", {
+		d: "M9 7.13v-1a3.003 3.003 0 1 1 6 0v1",
+		key: "d7y7pr"
+	}],
+	["path", {
+		d: "M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6",
+		key: "xs1cw7"
+	}],
+	["path", {
+		d: "M12 20v-9",
+		key: "1qisl0"
+	}],
+	["path", {
+		d: "M6.53 9C4.6 8.8 3 7.1 3 5",
+		key: "32zzws"
+	}],
+	["path", {
+		d: "M6 13H2",
+		key: "82j7cp"
+	}],
+	["path", {
+		d: "M3 21c0-2.1 1.7-3.9 3.8-4",
+		key: "4p0ekp"
+	}],
+	["path", {
+		d: "M20.97 5c0 2.1-1.6 3.8-3.5 4",
+		key: "18gb23"
+	}],
+	["path", {
+		d: "M22 13h-4",
+		key: "1jl80f"
+	}],
+	["path", {
+		d: "M17.2 17c2.1.1 3.8 1.9 3.8 4",
+		key: "k3fwyw"
+	}]
+]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Cherry = createLucideIcon("cherry", [
 	["path", {
 		d: "M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z",
@@ -113,6 +205,78 @@ var Club = createLucideIcon("club", [["path", {
 	d: "M12 17.66L12 22",
 	key: "ogfahf"
 }]]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Cpu = createLucideIcon("cpu", [
+	["path", {
+		d: "M12 20v2",
+		key: "1lh1kg"
+	}],
+	["path", {
+		d: "M12 2v2",
+		key: "tus03m"
+	}],
+	["path", {
+		d: "M17 20v2",
+		key: "1rnc9c"
+	}],
+	["path", {
+		d: "M17 2v2",
+		key: "11trls"
+	}],
+	["path", {
+		d: "M2 12h2",
+		key: "1t8f8n"
+	}],
+	["path", {
+		d: "M2 17h2",
+		key: "7oei6x"
+	}],
+	["path", {
+		d: "M2 7h2",
+		key: "asdhe0"
+	}],
+	["path", {
+		d: "M20 12h2",
+		key: "1q8mjw"
+	}],
+	["path", {
+		d: "M20 17h2",
+		key: "1fpfkl"
+	}],
+	["path", {
+		d: "M20 7h2",
+		key: "1o8tra"
+	}],
+	["path", {
+		d: "M7 20v2",
+		key: "4gnj0m"
+	}],
+	["path", {
+		d: "M7 2v2",
+		key: "1i4yhu"
+	}],
+	["rect", {
+		x: "4",
+		y: "4",
+		width: "16",
+		height: "16",
+		rx: "2",
+		key: "1vbyd7"
+	}],
+	["rect", {
+		x: "8",
+		y: "8",
+		width: "8",
+		height: "8",
+		rx: "1",
+		key: "z9xiuo"
+	}]
+]);
 /**
 * @license lucide-react v0.510.0 - ISC
 *
@@ -166,9 +330,73 @@ var Dices = createLucideIcon("dices", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Hash = createLucideIcon("hash", [
+	["line", {
+		x1: "4",
+		x2: "20",
+		y1: "9",
+		y2: "9",
+		key: "4lhtct"
+	}],
+	["line", {
+		x1: "4",
+		x2: "20",
+		y1: "15",
+		y2: "15",
+		key: "vyu0kd"
+	}],
+	["line", {
+		x1: "10",
+		x2: "8",
+		y1: "3",
+		y2: "21",
+		key: "1ggp8o"
+	}],
+	["line", {
+		x1: "16",
+		x2: "14",
+		y1: "3",
+		y2: "21",
+		key: "weycgp"
+	}]
+]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Heart = createLucideIcon("heart", [["path", {
 	d: "M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z",
 	key: "c3ymky"
+}]]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Lock = createLucideIcon("lock", [["rect", {
+	width: "18",
+	height: "11",
+	x: "3",
+	y: "11",
+	rx: "2",
+	ry: "2",
+	key: "1w4ew1"
+}], ["path", {
+	d: "M7 11V7a5 5 0 0 1 10 0v4",
+	key: "fwvmzm"
+}]]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Minus = createLucideIcon("minus", [["path", {
+	d: "M5 12h14",
+	key: "1ays0h"
 }]]);
 /**
 * @license lucide-react v0.510.0 - ISC
@@ -180,6 +408,36 @@ var Moon = createLucideIcon("moon", [["path", {
 	d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z",
 	key: "a7tn18"
 }]]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Radio = createLucideIcon("radio", [
+	["path", {
+		d: "M4.9 19.1C1 15.2 1 8.8 4.9 4.9",
+		key: "1vaf9d"
+	}],
+	["path", {
+		d: "M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5",
+		key: "u1ii0m"
+	}],
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "2",
+		key: "1c9p78"
+	}],
+	["path", {
+		d: "M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5",
+		key: "1j5fej"
+	}],
+	["path", {
+		d: "M19.1 4.9C23 8.8 23 15.1 19.1 19",
+		key: "10b0cb"
+	}]
+]);
 /**
 * @license lucide-react v0.510.0 - ISC
 *
@@ -202,6 +460,46 @@ var ScrollText = createLucideIcon("scroll-text", [
 	["path", {
 		d: "M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3",
 		key: "1ph1d7"
+	}]
+]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Server = createLucideIcon("server", [
+	["rect", {
+		width: "20",
+		height: "8",
+		x: "2",
+		y: "2",
+		rx: "2",
+		ry: "2",
+		key: "ngkwjq"
+	}],
+	["rect", {
+		width: "20",
+		height: "8",
+		x: "2",
+		y: "14",
+		rx: "2",
+		ry: "2",
+		key: "iecqi9"
+	}],
+	["line", {
+		x1: "6",
+		x2: "6.01",
+		y1: "6",
+		y2: "6",
+		key: "16zg32"
+	}],
+	["line", {
+		x1: "6",
+		x2: "6.01",
+		y1: "18",
+		y2: "18",
+		key: "nzw8ys"
 	}]
 ]);
 /**
@@ -269,6 +567,22 @@ var Sun = createLucideIcon("sun", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Terminal = createLucideIcon("terminal", [["polyline", {
+	points: "4 17 10 11 4 5",
+	key: "akl6gq"
+}], ["line", {
+	x1: "12",
+	x2: "20",
+	y1: "19",
+	y2: "19",
+	key: "q2wloq"
+}]]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var TriangleAlert = createLucideIcon("triangle-alert", [
 	["path", {
 		d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
@@ -329,5 +643,49 @@ var VolumeX = createLucideIcon("volume-x", [
 		key: "5ykzw1"
 	}]
 ]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Waypoints = createLucideIcon("waypoints", [
+	["circle", {
+		cx: "12",
+		cy: "4.5",
+		r: "2.5",
+		key: "r5ysbb"
+	}],
+	["path", {
+		d: "m10.2 6.3-3.9 3.9",
+		key: "1nzqf6"
+	}],
+	["circle", {
+		cx: "4.5",
+		cy: "12",
+		r: "2.5",
+		key: "jydg6v"
+	}],
+	["path", {
+		d: "M7 12h10",
+		key: "b7w52i"
+	}],
+	["circle", {
+		cx: "19.5",
+		cy: "12",
+		r: "2.5",
+		key: "1piiel"
+	}],
+	["path", {
+		d: "m13.8 17.7 3.9-3.9",
+		key: "1wyg1y"
+	}],
+	["circle", {
+		cx: "12",
+		cy: "19.5",
+		r: "2.5",
+		key: "13o1pw"
+	}]
+]);
 //#endregion
-export { Spade as a, Heart as c, Club as d, Cherry as f, Sun as i, Dices as l, Volume2 as n, ScrollText as o, TriangleAlert as r, Moon as s, VolumeX as t, Diamond as u };
+export { Binary as S, Diamond as _, Terminal as a, Cherry as b, Server as c, Moon as d, Minus as f, Dices as g, Hash as h, TriangleAlert as i, ScrollText as l, Heart as m, VolumeX as n, Sun as o, Lock as p, Volume2 as r, Spade as s, Waypoints as t, Radio as u, Cpu as v, Bug as x, Club as y };

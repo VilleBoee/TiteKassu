@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type GameId = "slots" | "blackjack" | "roulette" | "poker" | "house";
+export type GameId = "slots" | "blackjack" | "roulette" | "poker" | "segfault" | "house";
 
 export interface LedgerRow {
   id: string;
@@ -182,6 +182,7 @@ export const GAME_LABEL: Record<GameId, string> = {
   blackjack: "Blackjack",
   roulette: "Roulette",
   poker: "Texas Hold'em",
+  segfault: "Segfault",
   house: "House",
 };
 

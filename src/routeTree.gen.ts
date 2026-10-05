@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlackjackRouteImport } from './routes/blackjack'
 import { Route as PokerRouteImport } from './routes/poker'
 import { Route as RouletteRouteImport } from './routes/roulette'
+import { Route as SegfaultRouteImport } from './routes/segfault'
 import { Route as SlotsRouteImport } from './routes/slots'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const RouletteRoute = RouletteRouteImport.update({
   path: '/roulette',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SegfaultRoute = SegfaultRouteImport.update({
+  id: '/segfault',
+  path: '/segfault',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SlotsRoute = SlotsRouteImport.update({
   id: '/slots',
   path: '/slots',
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/blackjack': typeof BlackjackRoute
   '/poker': typeof PokerRoute
   '/roulette': typeof RouletteRoute
+  '/segfault': typeof SegfaultRoute
   '/slots': typeof SlotsRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/blackjack': typeof BlackjackRoute
   '/poker': typeof PokerRoute
   '/roulette': typeof RouletteRoute
+  '/segfault': typeof SegfaultRoute
   '/slots': typeof SlotsRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,23 @@ export interface FileRoutesById {
   '/blackjack': typeof BlackjackRoute
   '/poker': typeof PokerRoute
   '/roulette': typeof RouletteRoute
+  '/segfault': typeof SegfaultRoute
   '/slots': typeof SlotsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/blackjack' | '/poker' | '/roulette' | '/slots'
+  fullPaths:
+    '/' | '/blackjack' | '/poker' | '/roulette' | '/segfault' | '/slots'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/blackjack' | '/poker' | '/roulette' | '/slots'
-  id: '__root__' | '/' | '/blackjack' | '/poker' | '/roulette' | '/slots'
+  to: '/' | '/blackjack' | '/poker' | '/roulette' | '/segfault' | '/slots'
+  id:
+    | '__root__'
+    | '/'
+    | '/blackjack'
+    | '/poker'
+    | '/roulette'
+    | '/segfault'
+    | '/slots'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +93,7 @@ export interface RootRouteChildren {
   BlackjackRoute: typeof BlackjackRoute
   PokerRoute: typeof PokerRoute
   RouletteRoute: typeof RouletteRoute
+  SegfaultRoute: typeof SegfaultRoute
   SlotsRoute: typeof SlotsRoute
 }
 
@@ -109,6 +127,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RouletteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/segfault': {
+      id: '/segfault'
+      path: '/segfault'
+      fullPath: '/segfault'
+      preLoaderRoute: typeof SegfaultRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/slots': {
       id: '/slots'
       path: '/slots'
@@ -124,6 +149,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlackjackRoute: BlackjackRoute,
   PokerRoute: PokerRoute,
   RouletteRoute: RouletteRoute,
+  SegfaultRoute: SegfaultRoute,
   SlotsRoute: SlotsRoute,
 }
 export const routeTree = rootRouteImport

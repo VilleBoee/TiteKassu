@@ -461,16 +461,12 @@ var findRouteRules = /* @__PURE__ */ (() => {
 	return (m, p) => {
 		let r = [];
 		if (p.charCodeAt(p.length - 1) === 47) p = p.slice(0, -1) || "/";
-		let s = p.split("/"), l = s.length;
-		if (l > 1) {
-			if (s[1] === "TiteKassu") {
-				if (l > 2) {
-					if (s[2] === "assets") r.unshift({
-						data: $0,
-						params: { "_": s.slice(3).join("/") }
-					});
-				}
-			}
+		let s = p.split("/");
+		if (s.length > 1) {
+			if (s[1] === "assets") r.unshift({
+				data: $0,
+				params: { "_": s.slice(2).join("/") }
+			});
 		}
 		return r;
 	};
@@ -500,7 +496,7 @@ function defaultHandler(error, event) {
 	const { status = 500, statusText = "" } = unhandled ? {} : error;
 	if (status === 404) {
 		const url = event.url || new URL(event.req.url);
-		const baseURL = "/TiteKassu/";
+		const baseURL = "/";
 		if (/^\/[^/]/.test(baseURL) && !url.pathname.startsWith(baseURL)) return {
 			status: 302,
 			headers: new Headers({ location: `${baseURL}${url.pathname.slice(1)}${url.search}` })
