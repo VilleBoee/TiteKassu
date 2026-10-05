@@ -3,7 +3,7 @@ import { playCue } from "@/lib/casino/audio";
 import { useHouse } from "@/lib/casino/bank";
 import { randInt } from "@/lib/casino/rng";
 import { evaluateLine, lampName, PAYTABLE, REELS, type Lamp } from "@/lib/casino/slots";
-import { DenomPicker, GhostButton, GoldButton, LampMark, ResultLine, RuleNote } from "./bits";
+import { DenomPicker, Console, GhostButton, GoldButton, LampMark, ResultLine, RuleNote } from "./bits";
 import { BrokeRack } from "./shell";
 import { useI18n } from "@/lib/casino/i18n";
 import { useReducedMotion } from "./use-reduced-motion";
@@ -78,7 +78,7 @@ function Reel({
           </div>
         ))}
       </div>
-      <div className="pointer-events-none absolute inset-x-0 bg-gold/10" style={{ top: REEL_H, height: REEL_H }} />
+      <div className="pointer-events-none absolute inset-x-0 border-y border-phosphor/50 bg-phosphor/10" style={{ top: REEL_H, height: REEL_H }} />
     </div>
   );
 }
@@ -220,12 +220,15 @@ export function SlotsGame() {
   }
 
   return (
-    <div>
-      <p className="text-xs tracking-[0.2em] text-accent uppercase">{tx("Lamp")}</p>
-      <h1 className="mt-1 font-display text-5xl leading-none">{tx("Fruit machine")}</h1>
-      <p className="mt-3 max-w-prose text-muted">{tx("Three reels, one line through the middle. Hold a reel and it stays for one spin only.")}</p>
-      <div className="mt-6 rounded-card border border-gold-dim bg-panel p-3">
-        <div className="felt-surface grid grid-cols-3 gap-2 rounded-md p-2" aria-busy={spinning}>
+    <Console
+      pid="01"
+      unit="reel.fruit"
+      title={tx("Fruit machine")}
+      blurb={tx("Three reels, one line through the middle. Hold a reel and it stays for one spin only.")}
+      live={spinning || autoOn}
+    >
+      <div className="term-stage p-3">
+        <div className="grid grid-cols-3 gap-2" aria-busy={spinning}>
           {REELS.map((strip, index) => (
             <Reel
               key={index}
@@ -245,11 +248,10 @@ export function SlotsGame() {
           {([0, 1, 2] as const).map((index) => (
             <GhostButton
               key={index}
-              cabinet
               aria-pressed={held[index]}
               disabled={spinning}
               onClick={() => toggleHold(index)}
-              className={held[index] ? "border-gold text-gold" : ""}
+              className={held[index] ? "border-phosphor bg-phosphor/15 text-phosphor" : ""}
             >
               {tx(held[index] ? "Held" : "Hold")}
             </GhostButton>
@@ -261,7 +263,7 @@ export function SlotsGame() {
       </div>
       <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mb-2 text-xs tracking-wide text-muted uppercase">{tx("Bet")}</p>
+          <p className="mb-2 font-mono text-xs tracking-wide text-term-muted uppercase">{tx("Bet")}</p>
           <DenomPicker value={bet} onChange={setBet} denoms={BETS} disabled={spinning || autoOn} label="Bet size" />
         </div>
         <div className="flex flex-col items-stretch gap-2 sm:items-end">
@@ -282,7 +284,6 @@ export function SlotsGame() {
             {AUTO_SPINS.map((count) => (
               <GhostButton
                 key={count}
-                cabinet
                 disabled={autoOn || spinning || held.every(Boolean) || chips < bet}
                 onClick={() => startAuto(count)}
               >
@@ -298,12 +299,12 @@ export function SlotsGame() {
           {PAYTABLE.map((row) => (
             <li key={row.label} className="flex justify-between gap-4">
               <span>{tx(row.label)}</span>
-              <span className="num text-fg">{row.mult}×</span>
+              <span className="num text-term-fg">{row.mult}×</span>
             </li>
           ))}
         </ul>
         <p>{tx("Only the center symbol of each reel counts. A hold lasts one spin, then every reel is free again.")}</p>
       </RuleNote>
-    </div>
+    </Console>
   );
 }

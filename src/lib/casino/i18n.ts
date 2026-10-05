@@ -168,14 +168,14 @@ const en = {
     "When a bug detonates on a win, it clears the symbols around it. Roots stay, and the next drop gains +1, up to 5×. A bug on a dead spin still detonates, without raising the multiplier. Four or more of the same symbol in a line that did not pay become bugs and clear the cells above them.",
   sfRules3:
     "Three or more roots open a root shell: a 6 by 3 board and three respins. Tokens stick. A new token resets the count. A hotfix doubles every token once. One run caps at 400 times the stake.",
-  sfPayBit: "Bit · 3 to 6 · 0.25×, 0.60×, 1.40×, 3.20× a route",
-  sfPayPing: "Ping · 3 to 6 · 0.30×, 0.80×, 1.80×, 4× a route",
-  sfPayHash: "Hash · 3 to 6 · 0.40×, 1×, 2.20×, 5× a route",
-  sfPayLink: "Link · 3 to 6 · 0.50×, 1.30×, 3×, 6.50× a route",
-  sfPayLock: "Lock · 3 to 6 · 0.70×, 1.80×, 4.20×, 9× a route",
-  sfPayChip: "Chip · 3 to 6 · 1×, 2.60×, 6×, 13× a route",
-  sfPayRack: "Rack · 3 to 6 · 1.50×, 4×, 9×, 20× a route",
-  sfPayCore: "Core · 3 to 6 · 2.50×, 6.50×, 16×, 34× a route",
+  sfPayBit: "💠 Bit · 3 to 6 · 0.25×, 0.60×, 1.40×, 3.20× a route",
+  sfPayPing: "📡 Ping · 3 to 6 · 0.30×, 0.80×, 1.80×, 4× a route",
+  sfPayHash: "🔶 Hash · 3 to 6 · 0.40×, 1×, 2.20×, 5× a route",
+  sfPayLink: "🔗 Link · 3 to 6 · 0.50×, 1.30×, 3×, 6.50× a route",
+  sfPayLock: "🔒 Lock · 3 to 6 · 0.70×, 1.80×, 4.20×, 9× a route",
+  sfPayChip: "💻 Chip · 3 to 6 · 1×, 2.60×, 6×, 13× a route",
+  sfPayRack: "🗄️ Rack · 3 to 6 · 1.50×, 4×, 9×, 20× a route",
+  sfPayCore: "💎 Core · 3 to 6 · 2.50×, 6.50×, 16×, 34× a route",
 } as const;
 
 export type CopyKey = keyof typeof en;
@@ -347,14 +347,14 @@ const fi: Record<CopyKey, string> = {
     "Kun bugi räjähtää osumassa, se tyhjentää viereiset symbolit. Rootit jäävät, ja seuraava pudotus saa +1, enintään 5×. Tyhjällä kierroksella bugi räjähtää, mutta kerroin ei nouse. Neljä tai useampi sama symboli vaakaan ilman voittoa muuttuu bugeiksi ja tyhjentää niiden yläpuolen.",
   sfRules3:
     "Kolme tai useampi root avaa root-shellin: 6×3 ja kolme uudelleenpyöräytystä. Tokenit jäävät. Uusi token nollaa laskurin. Hotfix tuplaa tokenit kerran. Yhden ajon katto on 400× panos.",
-  sfPayBit: "Bit · 3–6 · 0,25×, 0,60×, 1,40×, 3,20× per reitti",
-  sfPayPing: "Ping · 3–6 · 0,30×, 0,80×, 1,80×, 4× per reitti",
-  sfPayHash: "Hash · 3–6 · 0,40×, 1×, 2,20×, 5× per reitti",
-  sfPayLink: "Link · 3–6 · 0,50×, 1,30×, 3×, 6,50× per reitti",
-  sfPayLock: "Lock · 3–6 · 0,70×, 1,80×, 4,20×, 9× per reitti",
-  sfPayChip: "Chip · 3–6 · 1×, 2,60×, 6×, 13× per reitti",
-  sfPayRack: "Rack · 3–6 · 1,50×, 4×, 9×, 20× per reitti",
-  sfPayCore: "Core · 3–6 · 2,50×, 6,50×, 16×, 34× per reitti",
+  sfPayBit: "💠 Bit · 3–6 · 0,25×, 0,60×, 1,40×, 3,20× per reitti",
+  sfPayPing: "📡 Ping · 3–6 · 0,30×, 0,80×, 1,80×, 4× per reitti",
+  sfPayHash: "🔶 Hash · 3–6 · 0,40×, 1×, 2,20×, 5× per reitti",
+  sfPayLink: "🔗 Link · 3–6 · 0,50×, 1,30×, 3×, 6,50× per reitti",
+  sfPayLock: "🔒 Lock · 3–6 · 0,70×, 1,80×, 4,20×, 9× per reitti",
+  sfPayChip: "💻 Chip · 3–6 · 1×, 2,60×, 6×, 13× per reitti",
+  sfPayRack: "🗄️ Rack · 3–6 · 1,50×, 4×, 9×, 20× per reitti",
+  sfPayCore: "💎 Core · 3–6 · 2,50×, 6,50×, 16×, 34× per reitti",
 };
 
 const phrases: [string, string][] = [

@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Binary, Bug, Cpu, Hash, Lock, Minus, Radio, Server, Terminal, Waypoints } from "lucide-react";
 import { playCue } from "@/lib/casino/audio";
 import { useHouse } from "@/lib/casino/bank";
 import { useI18n, type CopyKey } from "@/lib/casino/i18n";
 import { resolveSpin, waysFor, type Cell, type Frame, type Sym } from "@/lib/casino/segfault";
-import { DenomPicker, GoldButton, ResultLine, RuleNote } from "./bits";
+import { Console, DenomPicker, GoldButton, ResultLine, RuleNote } from "./bits";
 import { BrokeRack } from "./shell";
 import { useReducedMotion } from "./use-reduced-motion";
 
@@ -30,25 +29,33 @@ const IDLE: Sym[][] = [
   ["nop", "nop", "nop", "nop", "core", "root"],
 ];
 
+const GLYPH: Record<Sym, string> = {
+  bit: "💠",
+  ping: "📡",
+  hash: "🔶",
+  link: "🔗",
+  lock: "🔒",
+  chip: "💻",
+  rack: "🗄️",
+  core: "💎",
+  bug: "🐞",
+  root: "🐚",
+  nop: "·",
+};
+
 function Glyph({ sym }: { sym: Sym }) {
-  if (sym === "bug") return <Bug className="size-4" aria-hidden />;
-  if (sym === "root") return <Terminal className="size-4" aria-hidden />;
-  if (sym === "ping") return <Radio className="size-4" aria-hidden />;
-  if (sym === "hash") return <Hash className="size-4" aria-hidden />;
-  if (sym === "link") return <Waypoints className="size-4" aria-hidden />;
-  if (sym === "lock") return <Lock className="size-4" aria-hidden />;
-  if (sym === "chip") return <Cpu className="size-4" aria-hidden />;
-  if (sym === "rack") return <Server className="size-4" aria-hidden />;
-  if (sym === "nop") return <Minus className="size-4" aria-hidden />;
-  if (sym === "core") return <span className="font-display text-lg leading-none">K</span>;
-  return <Binary className="size-4" aria-hidden />;
+  return (
+    <span className={`leading-none select-none ${sym === "nop" ? "text-lg text-ivory/35" : "text-3xl"}`} role="img" aria-label={sym}>
+      {GLYPH[sym]}
+    </span>
+  );
 }
 
 function tone(sym: Sym): string {
   if (sym === "bug") return "border-crimson bg-crimson/25 text-ivory";
-  if (sym === "root") return "border-gold bg-gold/20 text-gold";
-  if (sym === "nop") return "border-line bg-ink/50 text-ivory/40";
-  if (sym === "core" || sym === "rack") return "border-gold-dim bg-ink/35 text-accent";
+  if (sym === "root") return "border-phosphor bg-phosphor/15 text-phosphor";
+  if (sym === "nop") return "border-term-line bg-ink/50 text-ivory/40";
+  if (sym === "core" || sym === "rack") return "border-phosphor/60 bg-ink/35 text-phosphor";
   if (sym === "chip" || sym === "lock" || sym === "link") return "border-line bg-ink/35 text-ivory";
   return "border-line bg-ink/35 text-ivory/80";
 }
@@ -141,22 +148,19 @@ export function SegfaultGame() {
                   : t("sfIdle");
 
   return (
-    <div>
-      <p className="text-xs tracking-[0.2em] text-accent uppercase">{t("sfRack")}</p>
-      <h1 className="mt-1 font-display text-5xl leading-none">{t("gameSegfault")}</h1>
-      <p className="mt-3 max-w-prose text-muted">{t("sfIntro")}</p>
-      <div className="mt-6 rounded-card border border-gold-dim bg-panel p-3">
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-xs tracking-wide text-muted uppercase">
+    <Console pid="05" unit="rack.segfault" title={t("gameSegfault")} blurb={t("sfIntro")} live={running}>
+      <div className="term-stage p-3">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 font-mono text-xs tracking-wide text-term-muted uppercase">
           <span>{t("sfRows", { n: frame?.open ?? 3 })}</span>
-          <span className="num text-accent">{t("sfWays", { n: fmt(waysFor(frame?.open ?? 3)) })}</span>
+          <span className="num text-phosphor">{t("sfWays", { n: fmt(waysFor(frame?.open ?? 3)) })}</span>
           <span>{t("sfMult", { n: frame?.mult ?? 1 })}</span>
         </div>
-        <div className="mb-2 grid grid-cols-6 gap-1 text-center text-xs tracking-widest text-muted">
+        <div className="mb-2 grid grid-cols-6 gap-1 text-center font-mono text-xs tracking-widest text-term-muted">
           {Array.from({ length: 6 }, (_, c) => (
             <span key={c}>0{c + 1}</span>
           ))}
         </div>
-        <div className="felt-surface grid grid-cols-6 gap-1 rounded-md p-2" aria-busy={running}>
+        <div className="grid grid-cols-6 gap-1" aria-busy={running}>
           {Array.from({ length: 6 }, (_, c) => (
             <div key={c} className="grid gap-1">
               {Array.from({ length: 6 }, (_, r) => {
@@ -165,13 +169,13 @@ export function SegfaultGame() {
                 const locked = frame?.mode !== "shell" && r < 6 - (frame?.open ?? 3);
                 const on = lit.has(`${c}:${r}`);
                 const falling = Boolean(frame && frame.kind === "drop" && !locked);
-                const ring = frame?.kind === "blast" && on ? "ring-2 ring-crimson" : on ? "ring-2 ring-gold" : "";
+                const ring = frame?.kind === "blast" && on ? "ring-2 ring-crimson" : on ? "ring-2 ring-phosphor" : "";
                 return (
                   <div
                     key={`${cursor}-${r}`}
-                    className={`relative flex aspect-square items-center justify-center rounded-sm border ${locked ? "border-line bg-ink/70" : tone(cell.sym)} ${ring} ${cell.hot ? "ring-2 ring-ivory" : ""} ${falling ? "sf-fall" : ""}`}
+                    className={`relative flex aspect-square items-center justify-center rounded-sm border ${locked ? "border-term-line bg-ink/70" : tone(cell.sym)} ${ring} ${cell.hot ? "ring-2 ring-ivory" : ""} ${falling ? "sf-fall" : ""}`}
                   >
-                    {locked ? <span className="h-px w-5 bg-stroke" /> : cell.cash ? (
+                    {locked ? <span className="h-px w-5 bg-term-muted" /> : cell.cash ? (
                       <span className="num text-xs leading-none">{cell.cash}</span>
                     ) : (
                       <Glyph sym={cell.sym} />
@@ -183,7 +187,7 @@ export function SegfaultGame() {
           ))}
         </div>
         {frame?.mode === "shell" ? (
-          <p className="mt-2 text-center text-xs tracking-[0.16em] text-accent uppercase">{t("sfShell", { n: frame.shellLeft ?? 0 })}</p>
+          <p className="mt-2 text-center font-mono text-xs tracking-wide text-phosphor uppercase">{t("sfShell", { n: frame.shellLeft ?? 0 })}</p>
         ) : null}
       </div>
       <div className="mt-5">
@@ -191,7 +195,7 @@ export function SegfaultGame() {
       </div>
       <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mb-2 text-xs tracking-wide text-muted uppercase">{t("betSize")}</p>
+          <p className="mb-2 font-mono text-xs tracking-wide text-term-muted uppercase">{t("betSize")}</p>
           <DenomPicker value={bet} onChange={setBet} denoms={BETS} disabled={running} label="Bet size" />
         </div>
         <GoldButton className="min-w-32 px-8" disabled={running || chips < bet} onClick={run}>
@@ -209,6 +213,6 @@ export function SegfaultGame() {
           ))}
         </ul>
       </RuleNote>
-    </div>
+    </Console>
   );
 }

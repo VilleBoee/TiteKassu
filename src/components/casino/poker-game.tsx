@@ -19,7 +19,7 @@ import {
   type Table,
 } from "@/lib/casino/holdem";
 import { rankWord, useI18n, type CopyKey } from "@/lib/casino/i18n";
-import { GhostButton, GoldButton, PlayingCard, ResultLine, RuleNote } from "./bits";
+import { Console, GhostButton, GoldButton, PlayingCard, ResultLine, RuleNote } from "./bits";
 import { BrokeRack } from "./shell";
 import { useReducedMotion } from "./use-reduced-motion";
 
@@ -316,18 +316,16 @@ export function PokerGame() {
   }
 
   return (
-    <div>
-      <p className="text-xs tracking-[0.2em] text-accent uppercase">{t("blinds", { sb: SB, bb: BB })}</p>
-      <h1 className="mt-1 font-display text-5xl leading-none">{t("gamePoker")}</h1>
-      <p className="mt-3 max-w-prose text-muted">{t("roomPoker")}</p>
-      <div className="felt-surface mt-6 rounded-card border border-gold-dim px-3 py-4 sm:px-5">
+    <Console pid="04" unit="table.holdem" title={t("gamePoker")} blurb={t("roomPoker")} live={Boolean(live)}>
+      <p className="mb-3 font-mono text-xs text-term-muted">{t("blinds", { sb: SB, bb: BB })}</p>
+      <div className="felt-surface rounded-md border border-term-line px-3 py-4 sm:px-5">
         <div className="grid grid-cols-3 gap-2">{[2, 3, 4].map((index) => renderSeat(index))}</div>
         <div className="mt-2 grid grid-cols-2 gap-2">
           {renderSeat(1)}
           {renderSeat(5)}
         </div>
         <div className="mt-4 text-center">
-          <p className="text-xs tracking-[0.16em] text-ivory/70 uppercase">
+          <p className="font-mono text-xs tracking-wide text-ivory/75 uppercase">
             {shown ? t(shown.street) : t("preflop")} · {t("pot")} {fmt(shown?.pot ?? 0)}
           </p>
           <div className="mt-2 flex min-h-14 flex-wrap items-center justify-center gap-1.5" aria-label={t("board")}>
@@ -341,7 +339,7 @@ export function PokerGame() {
         <div className="mt-4 border-t border-ivory/15 pt-4">{renderSeat(0, true)}</div>
         {holding ? (
           <div className="mt-3 text-center">
-            <p className="text-sm text-gold">{holding}</p>
+            <p className="text-sm text-phosphor">{holding}</p>
             {shown && !shown.folded[0] ? <p className="mt-1 text-xs text-ivory/70">{t("handHelp")}</p> : null}
           </div>
         ) : null}
@@ -349,7 +347,7 @@ export function PokerGame() {
       <div className="mt-5">
         <ResultLine text={line} tone={shown && shown.status !== "done" ? "idle" : tone} />
       </div>
-      {refilled && live ? <p className="mt-2 text-sm text-muted">{t("railRefill")}</p> : null}
+      {refilled && live ? <p className="mt-2 text-sm text-term-muted">{t("railRefill")}</p> : null}
       {!live ? (
         <div className="mt-5">
           <GoldButton disabled={!ready || chips < 1} onClick={deal}>
@@ -380,13 +378,13 @@ export function PokerGame() {
           ) : null}
         </div>
       ) : null}
-      <p className="mt-3 text-sm text-muted">{t("keys")}</p>
-      {chips < 1 ? <p className="mt-2 text-sm text-muted">{t("needChips")}</p> : null}
+      <p className="mt-3 font-mono text-xs text-term-muted">{t("keys")}</p>
+      {chips < 1 ? <p className="mt-2 text-sm text-term-muted">{t("needChips")}</p> : null}
       <BrokeRack />
       <RuleNote title="House rules">
         <p>{t("holdemRules")}</p>
       </RuleNote>
-    </div>
+    </Console>
   );
 }
 
@@ -498,7 +496,7 @@ function SeatSpot({
 }) {
   return (
     <div
-      className={`min-w-0 rounded-md px-1 py-1 text-center ${acting ? "bg-ink/30 ring-2 ring-gold" : ""}`}
+      className={`min-w-0 rounded-md px-1 py-1 text-center ${acting ? "bg-ink/30 ring-2 ring-phosphor" : ""}`}
       aria-current={acting ? "true" : undefined}
     >
       {cards.length > 0 ? (
@@ -512,7 +510,7 @@ function SeatSpot({
         {name}
         {button ? (
           <span
-            className="ml-1 inline-flex size-5 items-center justify-center rounded-full border border-gold bg-gold align-middle text-[10px] font-semibold text-ink"
+            className="ml-1 inline-flex size-5 items-center justify-center rounded-full bg-phosphor align-middle font-mono text-[10px] font-semibold text-phosphor-ink"
             title={buttonLabel}
           >
             D
@@ -521,7 +519,7 @@ function SeatSpot({
       </p>
       <p className="num text-xs text-ivory/80">{stack}</p>
       {acting ? (
-        <p className="mt-1 inline-flex rounded-full bg-gold px-2 py-0.5 text-[10px] font-semibold tracking-[0.14em] text-ink uppercase">
+        <p className="mt-1 inline-flex rounded-full bg-phosphor px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-phosphor-ink uppercase">
           {actingLabel}
         </p>
       ) : null}
@@ -530,7 +528,7 @@ function SeatSpot({
           {foldedLabel}
         </p>
       ) : null}
-      {bet ? <p className="mt-1 text-[11px] tracking-wide text-gold uppercase">{bet}</p> : null}
+      {bet ? <p className="mt-1 font-mono text-[11px] tracking-wide text-phosphor uppercase">{bet}</p> : null}
     </div>
   );
 }

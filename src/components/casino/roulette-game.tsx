@@ -16,7 +16,7 @@ import {
   type BetKind,
   type PlacedBet,
 } from "@/lib/casino/roulette";
-import { DenomPicker, GhostButton, GoldButton, ResultLine, RuleNote } from "./bits";
+import { Console, DenomPicker, GhostButton, GoldButton, ResultLine, RuleNote } from "./bits";
 import { BrokeRack } from "./shell";
 import { useI18n } from "@/lib/casino/i18n";
 import { useReducedMotion } from "./use-reduced-motion";
@@ -211,11 +211,14 @@ export function RouletteGame() {
   const straightOf = (n: number) => bets.find((item) => item.bet.kind === "straight" && item.bet.n === n)?.amount ?? 0;
 
   return (
-    <div>
-      <p className="text-xs tracking-[0.2em] text-accent uppercase">{tx("Wheel")}</p>
-      <h1 className="mt-1 font-display text-5xl leading-none">{tx("Roulette")}</h1>
-      <p className="mt-3 max-w-prose text-muted">{tx("European wheel, thirty-seven pockets. Even-money bets lose on zero.")}</p>
-      <div className="mt-6 grid min-w-0 items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+    <Console
+      pid="03"
+      unit="wheel.roulette"
+      title={tx("Roulette")}
+      blurb={tx("European wheel, thirty-seven pockets. Even-money bets lose on zero.")}
+      live={spinning}
+    >
+      <div className="grid min-w-0 items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
         <div className="min-w-0">
           <div className="relative mx-auto w-full max-w-xs">
             <svg viewBox="0 0 320 320" className="w-full" role="img" aria-label={winning == null ? tx("Roulette wheel") : `${tx("Landed on ")}${winning}`}>
@@ -278,13 +281,13 @@ export function RouletteGame() {
                   setPending(null);
                   setChoices(null);
                 }}
-                className={`min-h-11 rounded-full px-4 text-sm capitalize disabled:opacity-40 ${mode === item ? "bg-gold text-ink" : "border border-line text-ivory"}`}
+                className={`min-h-11 rounded-md px-4 text-sm capitalize disabled:opacity-40 ${mode === item ? "bg-phosphor text-phosphor-ink" : "border border-term-line bg-term-elev text-term-fg"}`}
               >
                 {tx(item === "six" ? "Line" : item)}
               </button>
             ))}
           </div>
-          <p className="mb-2 text-sm text-muted">
+          <p className="mb-2 text-sm text-term-muted">
             {mode === "straight" && tx("Tap a number for a straight-up bet.")}
             {mode === "split" && (pending == null ? tx("Tap the first number of a split.") : `${tx("Now a neighbor of ")}${pending}.`)}
             {mode === "street" && tx("Tap any number to bet its street of three.")}
@@ -374,7 +377,7 @@ export function RouletteGame() {
       </div>
       <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mb-2 text-xs tracking-wide text-muted uppercase">{tx("Chip")} · {tx("Bet")} {fmt(onTable)}</p>
+          <p className="mb-2 font-mono text-xs tracking-wide text-term-muted uppercase">{tx("Chip")} · {tx("Bet")} {fmt(onTable)}</p>
           <DenomPicker value={denom} onChange={setDenom} denoms={DENOMS} disabled={spinning} />
         </div>
         <div className="flex flex-wrap gap-2">
@@ -391,11 +394,11 @@ export function RouletteGame() {
           {bets.map((item) => {
             const key = betKey(item.bet);
             return (
-              <li key={key} className="flex items-center justify-between gap-3 border-t border-line pt-2 text-sm">
+              <li key={key} className="flex items-center justify-between gap-3 border-t border-term-line pt-2 text-sm">
                 <span>{tx(describeBet(item.bet))}</span>
                 <span className="flex items-center gap-3">
-                  <span className="num text-accent">{fmt(item.amount)}</span>
-                  <button type="button" className="min-h-11 px-2 text-muted" disabled={spinning} onClick={() => remove(key)}>
+                  <span className="num text-phosphor">{fmt(item.amount)}</span>
+                  <button type="button" className="min-h-11 px-2 text-term-muted" disabled={spinning} onClick={() => remove(key)}>
                     {tx("Remove")}
                   </button>
                 </span>
@@ -409,7 +412,7 @@ export function RouletteGame() {
         <p>{tx("Straight 35 to 1. Split 17 to 1. Street 11 to 1. Corner 8 to 1. Six-line 5 to 1. Dozens and columns 2 to 1. Red, black, odd, even, and halves pay 1 to 1, and lose if the ball finds zero.")}</p>
         <p>{tx("Column 1 is 1, 4, 7… Column 2 is 2, 5, 8… Column 3 is 3, 6, 9…")}</p>
       </RuleNote>
-    </div>
+    </Console>
   );
 }
 

@@ -17,7 +17,7 @@ export const Route = createRootRoute({
         content:
           "TiteKassu is a private parlor for a fruit machine, blackjack, European roulette, and Texas Hold'em. Play chips only.",
       },
-      { name: "theme-color", content: "#100c0b" },
+      { name: "theme-color", content: "#0b121c" },
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: `${publicBase}favicon.svg` },
@@ -28,7 +28,7 @@ export const Route = createRootRoute({
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@400;500;600&display=swap",
       },
     ],
   }),

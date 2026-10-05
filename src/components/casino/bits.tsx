@@ -150,8 +150,8 @@ export function DenomPicker({
             aria-checked={on}
             disabled={disabled}
             onClick={() => onChange(denom)}
-            className={`num flex size-12 items-center justify-center rounded-full border-2 text-sm font-semibold disabled:opacity-40 ${
-              on ? "border-ivory bg-gold text-ink" : "border-gold-dim bg-felt-deep text-gold"
+            className={`num inline-flex h-11 min-w-11 items-center justify-center rounded-md border px-2 font-mono text-sm font-medium disabled:opacity-40 ${
+              on ? "border-phosphor bg-phosphor text-phosphor-ink" : "border-term-line bg-term-elev text-term-fg"
             }`}
           >
             {denom}
@@ -167,7 +167,7 @@ export function GoldButton({ className = "", children, ...props }: ButtonHTMLAtt
     <button
       {...props}
       type="button"
-      className={`inline-flex min-h-11 items-center justify-center rounded-full bg-gold px-5 text-sm font-semibold tracking-wide text-ink disabled:opacity-40 ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center rounded-md bg-phosphor px-5 text-sm font-semibold text-phosphor-ink disabled:opacity-40 ${className}`}
     >
       {children}
     </button>
@@ -180,12 +180,12 @@ export function GhostButton({
   children,
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & { cabinet?: boolean }) {
-  const tone = cabinet ? "border-line text-ivory" : "border-stroke text-fg";
+  const tone = cabinet ? "border-term-line bg-term text-term-fg" : "border-term-line bg-term-elev text-term-fg";
   return (
     <button
       {...props}
       type="button"
-      className={`inline-flex min-h-11 items-center justify-center rounded-full border px-4 text-sm font-medium disabled:opacity-40 ${tone} ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center rounded-md border px-4 text-sm font-medium transition-colors disabled:opacity-40 ${tone} ${className}`}
     >
       {children}
     </button>
@@ -195,19 +195,54 @@ export function GhostButton({
 export function RuleNote({ title, children }: { title: string; children: ReactNode }) {
   const { tx } = useI18n();
   return (
-    <details className="mt-6 border-t border-stroke pt-4">
-      <summary className="min-h-11 cursor-pointer list-none text-sm tracking-wide text-accent uppercase">{tx(title)}</summary>
-      <div className="mt-3 space-y-2 text-sm text-muted">{children}</div>
+    <details className="mt-6 border-t border-term-line pt-4">
+      <summary className="min-h-11 cursor-pointer list-none font-mono text-xs tracking-wide text-phosphor uppercase">{tx(title)}</summary>
+      <div className="mt-3 space-y-2 text-sm leading-relaxed text-term-muted">{children}</div>
     </details>
   );
 }
 
 export function ResultLine({ text, tone }: { text: string; tone: "win" | "push" | "lose" | "idle" }) {
   const { tx } = useI18n();
-  const color = tone === "win" ? "text-accent" : tone === "lose" ? "text-crimson" : "text-fg";
+  const color = tone === "win" ? "text-phosphor" : tone === "lose" ? "text-alert" : "text-term-fg";
   return (
-    <p className={`font-display text-3xl leading-none ${color}`} aria-live="polite">
-      {tx(text)}
+    <p className={`flex items-baseline gap-3 rounded-md border border-term-line bg-term-elev px-4 py-3 font-mono text-sm leading-relaxed ${color}`} aria-live="polite">
+      <span className="text-term-muted" aria-hidden>
+        {">"}
+      </span>
+      <span>{tx(text)}</span>
     </p>
+  );
+}
+
+export function Console({
+  pid,
+  unit,
+  title,
+  blurb,
+  live = false,
+  children,
+}: {
+  pid: string;
+  unit: string;
+  title: string;
+  blurb: string;
+  live?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <section className="term-shell">
+      <div className="term-bar">
+        <span className={`term-led ${live ? "term-led-run" : ""}`} aria-hidden />
+        <span className="font-mono text-xs text-term-muted">pid {pid}</span>
+        <span className="truncate font-mono text-xs text-term-fg">{unit}</span>
+        <span className="ml-auto font-mono text-xs text-term-muted">{live ? "run" : "ready"}</span>
+      </div>
+      <div className="term-body">
+        <h1 className="font-display text-4xl leading-none text-term-fg sm:text-5xl">{title}</h1>
+        <p className="mt-3 max-w-prose text-sm leading-relaxed text-term-muted">{blurb}</p>
+        <div className="mt-6">{children}</div>
+      </div>
+    </section>
   );
 }

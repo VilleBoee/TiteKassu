@@ -74,7 +74,7 @@ export function HouseShell({ children, wide = false }: { children: ReactNode; wi
                   key={code}
                   type="button"
                   aria-pressed={locale === code}
-                  className={`min-w-11 px-3 text-xs font-semibold tracking-wide ${locale === code ? "bg-gold text-ink" : "text-muted"}`}
+                  className={`min-w-11 px-3 text-xs font-semibold tracking-wide ${locale === code ? "bg-accent text-accent-ink" : "text-muted"}`}
                   onClick={() => setLocale(code)}
                 >
                   {code === "fi" ? "FI" : "EN"}
@@ -122,7 +122,7 @@ export function HouseShell({ children, wide = false }: { children: ReactNode; wi
                 key={item.to}
                 to={item.to}
                 className={`inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-sm ${
-                  on ? "bg-gold text-ink" : "border border-stroke text-muted"
+                  on ? "bg-accent text-accent-ink" : "border border-stroke text-muted"
                 }`}
                 aria-current={on ? "page" : undefined}
               >
@@ -187,7 +187,7 @@ function Ledger({ onClose }: { onClose: () => void }) {
         <div className="mt-5 flex flex-wrap gap-2">
           <button
             type="button"
-            className="min-h-11 rounded-full bg-gold px-4 text-sm font-semibold text-ink"
+            className="min-h-11 rounded-full bg-accent px-4 text-sm font-semibold text-accent-ink"
             onClick={() => {
               rebuy();
               playCue("chip");
@@ -248,9 +248,9 @@ export function BrokeRack() {
   const { t, fmt } = useI18n();
   if (chips >= 10) return null;
   return (
-    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-card border border-stroke bg-surface px-4 py-3">
-      <p className="text-sm text-muted">{t("rackEmpty")}</p>
-      <button type="button" className="min-h-11 rounded-full bg-gold px-4 text-sm font-semibold text-ink" onClick={() => rebuy()}>
+    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-md border border-term-line bg-term-elev px-4 py-3">
+      <p className="text-sm text-term-muted">{t("rackEmpty")}</p>
+      <button type="button" className="min-h-11 rounded-md bg-phosphor px-4 text-sm font-semibold text-phosphor-ink" onClick={() => rebuy()}>
         {t("buyIn", { n: fmt(BUY_IN) })}
       </button>
     </div>

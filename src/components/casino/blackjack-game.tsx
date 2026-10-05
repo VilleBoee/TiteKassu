@@ -18,7 +18,7 @@ import {
   type Table,
 } from "@/lib/casino/blackjack";
 import { handTotal, type Card } from "@/lib/casino/cards";
-import { DenomPicker, GhostButton, GoldButton, PlayingCard, ResultLine, RuleNote } from "./bits";
+import { DenomPicker, Console, GhostButton, GoldButton, PlayingCard, ResultLine, RuleNote } from "./bits";
 import { BrokeRack } from "./shell";
 import { useI18n } from "@/lib/casino/i18n";
 import { useReducedMotion } from "./use-reduced-motion";
@@ -242,16 +242,13 @@ export function BlackjackGame() {
   const dealerTotal = !holeDown && dealerUp.length >= 2 ? scoreOf(dealerUp) : "";
 
   return (
-    <div>
-      <p className="text-xs tracking-[0.2em] text-accent uppercase">{t("bjShoe")}</p>
-      <h1 className="mt-1 font-display text-5xl leading-none">{t("gameBlackjack")}</h1>
-      <p className="mt-3 max-w-prose text-muted">{t("bjIntro")}</p>
-      <div className="felt-surface mt-6 rounded-card border border-gold-dim px-4 py-5">
-        <p className="text-xs tracking-[0.16em] text-ivory/70 uppercase">
+    <Console pid="02" unit="table.blackjack" title={t("gameBlackjack")} blurb={t("bjIntro")} live={busy}>
+      <div className="felt-surface rounded-md border border-term-line px-4 py-5">
+        <p className="font-mono text-xs tracking-wide text-ivory/75 uppercase">
           {t("bjDealer")}
           {dealerTotal ? ` · ${dealerTotal}` : ""}
         </p>
-        <div className="mt-2 flex gap-2">
+        <div className="mt-3 flex gap-2">
           {dealerUp.map((card, index) => (
             <PlayingCard key={`${card.r}${card.s}${index}`} card={card} enter />
           ))}
@@ -266,12 +263,12 @@ export function BlackjackGame() {
               const live = phase === "player" && index === table.active && !busy;
               const shownCards = hand.cards.slice(0, view.players[index] ?? 0);
               return (
-                <div key={index} className={`rounded-md p-2 ${live ? "ring-2 ring-gold" : ""}`}>
-                  <p className="text-xs tracking-[0.16em] text-ivory/70 uppercase">
+                <div key={index} className={`rounded-md border p-3 ${live ? "border-phosphor bg-ink/20" : "border-transparent"}`}>
+                  <p className="font-mono text-xs tracking-wide text-ivory/75 uppercase">
                     {table.hands.length > 1 ? t(index === 0 ? "bjLeft" : "bjRight") : t("you")}
                     {shownCards.length ? ` · ${scoreOf(shownCards)}` : ""} · {t("betOf", { n: fmt(hand.bet) })}
                   </p>
-                  <div className="mt-2 flex flex-wrap gap-2">
+                  <div className="mt-3 flex flex-wrap gap-2">
                     {shownCards.map((card, cardIndex) => (
                       <PlayingCard key={`${card.r}${card.s}${cardIndex}`} card={card} enter />
                     ))}
@@ -288,7 +285,7 @@ export function BlackjackGame() {
       {phase === "bet" || (phase === "done" && !busy) ? (
         <div className="mt-5 space-y-4">
           <div>
-            <p className="mb-2 text-xs tracking-wide text-muted uppercase">{t("bjAdd", { n: fmt(wager) })}</p>
+            <p className="mb-2 font-mono text-xs tracking-wide text-term-muted uppercase">{t("bjAdd", { n: fmt(wager) })}</p>
             <DenomPicker
               value={denom}
               onChange={(value) => {
@@ -341,12 +338,12 @@ export function BlackjackGame() {
           </GhostButton>
         </div>
       ) : null}
-      <p className="mt-3 text-sm text-muted">{t("bjKeys")}</p>
+      <p className="mt-3 font-mono text-xs text-term-muted">{t("bjKeys")}</p>
       <BrokeRack />
       <RuleNote title="House rules">
         <p>{t("bjRules1")}</p>
         <p>{t("bjRules2")}</p>
       </RuleNote>
-    </div>
+    </Console>
   );
 }
