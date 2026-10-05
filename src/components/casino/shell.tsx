@@ -6,6 +6,8 @@ import { BUY_IN, useHouse, type GameId } from "@/lib/casino/bank";
 import { useI18n } from "@/lib/casino/i18n";
 import { usePrefs } from "@/lib/casino/prefs";
 
+const VERSION = "0.1.4";
+
 const NAV: { to: "/" | "/slots" | "/blackjack" | "/roulette" | "/poker" | "/segfault"; key: "navSlots" | "navBlackjack" | "navRoulette" | "navPoker" | "navSegfault" }[] = [
   { to: "/slots", key: "navSlots" },
   { to: "/blackjack", key: "navBlackjack" },
@@ -60,9 +62,12 @@ export function HouseShell({ children, wide = false }: { children: ReactNode; wi
     <div className="min-h-dvh bg-bg text-fg">
       <header className="border-b border-stroke">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
-          <Link to="/" className="font-display text-2xl leading-none tracking-wide text-fg">
-            TiteKassu
-          </Link>
+          <div className="flex items-baseline gap-2">
+            <Link to="/" className="font-display text-2xl leading-none tracking-wide text-fg">
+              TiteKassu
+            </Link>
+            <span className="font-mono text-xs tracking-wide text-muted">{VERSION}</span>
+          </div>
           <div className="flex flex-wrap items-center justify-end gap-2">
             <p className="num rounded-full border border-stroke bg-surface px-3 py-2 text-sm text-accent" aria-live="polite">
               <span className="sr-only">{t("chips")} </span>

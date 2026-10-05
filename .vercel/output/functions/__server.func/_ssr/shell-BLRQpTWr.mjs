@@ -2,7 +2,7 @@ import { i as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime, b as Link, p as useRouterState } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as Spade, c as Heart, f as Club, i as Sun, n as Volume2, o as ScrollText, s as Moon, t as VolumeX, u as Diamond } from "../_libs/lucide-react.mjs";
 import { t as create } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/shell-Bl0y8KZI.js
+//#region node_modules/.nitro/vite/services/ssr/assets/shell-BLRQpTWr.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var ctx = null;
@@ -1263,6 +1263,7 @@ function Console({ pid, unit, title, blurb, live = false, children }) {
 		})]
 	});
 }
+var VERSION = "0.1.4";
 var NAV = [
 	{
 		to: "/slots",
@@ -1328,10 +1329,16 @@ function HouseShell({ children, wide = false }) {
 				className: "border-b border-stroke",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-						to: "/",
-						className: "font-display text-2xl leading-none tracking-wide text-fg",
-						children: "TiteKassu"
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-baseline gap-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+							to: "/",
+							className: "font-display text-2xl leading-none tracking-wide text-fg",
+							children: "TiteKassu"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "font-mono text-xs tracking-wide text-muted",
+							children: VERSION
+						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex flex-wrap items-center justify-end gap-2",
 						children: [
