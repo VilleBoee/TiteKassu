@@ -8,7 +8,7 @@ import { BrokeRack } from "./shell";
 import { useI18n } from "@/lib/casino/i18n";
 import { useReducedMotion } from "./use-reduced-motion";
 
-const REEL_H = 92;
+const REEL_H = 72;
 const LOOPS = 5;
 const DURATION = [1100, 1600, 2100];
 const BETS = [5, 10, 25, 50, 100] as const;

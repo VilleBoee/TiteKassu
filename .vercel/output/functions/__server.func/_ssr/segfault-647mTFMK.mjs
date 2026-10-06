@@ -1,8 +1,8 @@
 import { i as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
-import { S as useI18n, a as GhostButton, d as RuleNote, g as playCue, i as DenomPicker, n as BrokeRack, o as GoldButton, r as Console, s as HouseShell, u as ResultLine, v as randInt, x as useHouse } from "./shell-BLRQpTWr.mjs";
+import { S as useI18n, a as GhostButton, d as RuleNote, g as playCue, i as DenomPicker, n as BrokeRack, o as GoldButton, r as Console, s as HouseShell, u as ResultLine, v as randInt, x as useHouse } from "./shell-WYw15Y_j.mjs";
 import { t as useReducedMotion } from "./use-reduced-motion-CCumc2IX.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/segfault-B2hoapdJ.js
+//#region node_modules/.nitro/vite/services/ssr/assets/segfault-647mTFMK.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var PAY_SYMS = [
@@ -564,7 +564,7 @@ var GLYPH = {
 };
 function Glyph({ sym }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-		className: `leading-none select-none ${sym === "nop" ? "text-lg text-ivory/35" : "text-3xl"}`,
+		className: `sf-glyph leading-none select-none ${sym === "nop" ? "text-ivory/35" : ""}`,
 		role: "img",
 		"aria-label": sym,
 		children: GLYPH[sym]
@@ -722,7 +722,7 @@ function SegfaultGame() {
 		live: running || autoOn,
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "term-stage relative overflow-hidden p-3",
+				className: "term-stage sf-fit relative overflow-hidden p-2",
 				children: [
 					veil ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: `sf-veil ${veil}`,
@@ -785,14 +785,14 @@ function SegfaultGame() {
 				]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "mt-5",
+				className: "mt-3",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResultLine, {
 					text: line,
 					tone: toneName
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "mt-5 flex flex-wrap items-end justify-between gap-4",
+				className: "mt-3 flex flex-wrap items-end justify-between gap-3",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mb-2 font-mono text-xs tracking-wide text-term-muted uppercase",
 					children: t("betSize")

@@ -6,7 +6,7 @@ import { BUY_IN, useHouse, type GameId } from "@/lib/casino/bank";
 import { useI18n } from "@/lib/casino/i18n";
 import { usePrefs } from "@/lib/casino/prefs";
 
-const VERSION = "0.1.4";
+const VERSION = "v0.1.5";
 
 const NAV: { to: "/" | "/slots" | "/blackjack" | "/roulette" | "/poker" | "/segfault"; key: "navSlots" | "navBlackjack" | "navRoulette" | "navPoker" | "navSegfault" }[] = [
   { to: "/slots", key: "navSlots" },
@@ -61,25 +61,42 @@ export function HouseShell({ children, wide = false }: { children: ReactNode; wi
   return (
     <div className="min-h-dvh bg-bg text-fg">
       <header className="border-b border-stroke">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2 lg:flex-nowrap">
           <div className="flex items-baseline gap-2">
             <Link to="/" className="font-display text-2xl leading-none tracking-wide text-fg">
               TiteKassu
             </Link>
             <span className="font-mono text-xs tracking-wide text-muted">{VERSION}</span>
           </div>
-          <div className="flex flex-wrap items-center justify-end gap-2">
-            <p className="num rounded-full border border-stroke bg-surface px-3 py-2 text-sm text-accent" aria-live="polite">
+          <nav className="order-last flex w-full gap-1.5 overflow-x-auto lg:order-none lg:w-auto lg:flex-1" aria-label={t("tables")}>
+            {NAV.map((item) => {
+              const on = path === item.to;
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`inline-flex min-h-9 shrink-0 items-center rounded-full px-3 text-sm ${
+                    on ? "bg-accent text-accent-ink" : "border border-stroke text-muted"
+                  }`}
+                  aria-current={on ? "page" : undefined}
+                >
+                  {t(item.key)}
+                </Link>
+              );
+            })}
+          </nav>
+          <div className="ml-auto flex items-center gap-1.5">
+            <p className="num rounded-full border border-stroke bg-surface px-3 py-1.5 text-sm text-accent" aria-live="polite">
               <span className="sr-only">{t("chips")} </span>
               {hydrated ? fmt(chips) : fmt(BUY_IN)}
             </p>
-            <div className="inline-flex h-11 overflow-hidden rounded-full border border-stroke" role="group" aria-label={t("lang")}>
+            <div className="inline-flex h-9 overflow-hidden rounded-full border border-stroke" role="group" aria-label={t("lang")}>
               {(["fi", "en"] as const).map((code) => (
                 <button
                   key={code}
                   type="button"
                   aria-pressed={locale === code}
-                  className={`min-w-11 px-3 text-xs font-semibold tracking-wide ${locale === code ? "bg-accent text-accent-ink" : "text-muted"}`}
+                  className={`min-w-9 px-2.5 text-xs font-semibold tracking-wide ${locale === code ? "bg-accent text-accent-ink" : "text-muted"}`}
                   onClick={() => setLocale(code)}
                 >
                   {code === "fi" ? "FI" : "EN"}
@@ -88,7 +105,7 @@ export function HouseShell({ children, wide = false }: { children: ReactNode; wi
             </div>
             <button
               type="button"
-              className="inline-flex size-11 items-center justify-center rounded-full border border-stroke text-fg"
+              className="inline-flex size-9 items-center justify-center rounded-full border border-stroke text-fg"
               aria-pressed={theme === "light"}
               aria-label={theme === "light" ? t("themeDark") : t("themeLight")}
               onClick={toggleTheme}
@@ -97,7 +114,7 @@ export function HouseShell({ children, wide = false }: { children: ReactNode; wi
             </button>
             <button
               type="button"
-              className="inline-flex size-11 items-center justify-center rounded-full border border-stroke text-fg"
+              className="inline-flex size-9 items-center justify-center rounded-full border border-stroke text-fg"
               aria-pressed={!sound}
               aria-label={sound ? t("mute") : t("unmute")}
               onClick={() => {
@@ -110,7 +127,7 @@ export function HouseShell({ children, wide = false }: { children: ReactNode; wi
             </button>
             <button
               type="button"
-              className="inline-flex size-11 items-center justify-center rounded-full border border-stroke text-fg"
+              className="inline-flex size-9 items-center justify-center rounded-full border border-stroke text-fg"
               aria-expanded={ledger}
               aria-label={t("openLedger")}
               onClick={() => setLedger(true)}
@@ -119,25 +136,8 @@ export function HouseShell({ children, wide = false }: { children: ReactNode; wi
             </button>
           </div>
         </div>
-        <nav className="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 pb-3" aria-label={t("tables")}>
-          {NAV.map((item) => {
-            const on = path === item.to;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-sm ${
-                  on ? "bg-accent text-accent-ink" : "border border-stroke text-muted"
-                }`}
-                aria-current={on ? "page" : undefined}
-              >
-                {t(item.key)}
-              </Link>
-            );
-          })}
-        </nav>
       </header>
-      <main className={`mx-auto px-4 py-6 ${wide ? "max-w-6xl" : "max-w-3xl"}`}>{children}</main>
+      <main className={`mx-auto px-4 py-3 ${wide ? "max-w-6xl" : "max-w-3xl"}`}>{children}</main>
       {ledger ? <Ledger onClose={() => setLedger(false)} /> : null}
     </div>
   );

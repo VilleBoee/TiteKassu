@@ -1,8 +1,8 @@
 import { i as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
-import { S as useI18n, a as GhostButton, d as RuleNote, g as playCue, i as DenomPicker, n as BrokeRack, o as GoldButton, r as Console, s as HouseShell, u as ResultLine, v as randInt, x as useHouse } from "./shell-BLRQpTWr.mjs";
+import { S as useI18n, a as GhostButton, d as RuleNote, g as playCue, i as DenomPicker, n as BrokeRack, o as GoldButton, r as Console, s as HouseShell, u as ResultLine, v as randInt, x as useHouse } from "./shell-WYw15Y_j.mjs";
 import { t as useReducedMotion } from "./use-reduced-motion-CCumc2IX.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/roulette-Dqb7hkRx.js
+//#region node_modules/.nitro/vite/services/ssr/assets/roulette-BdUoTNDg.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var WHEEL = [
@@ -820,7 +820,7 @@ function Outside({ label, bet, bets, spinning, onAdd, hot }) {
 		type: "button",
 		disabled: spinning,
 		onClick: () => onAdd(bet),
-		className: `min-h-11 rounded-md px-2 py-1 text-sm disabled:opacity-40 ${hot === "red" ? "bg-crimson text-ivory" : hot === "black" ? "border border-line bg-ink text-ivory" : "bg-felt text-ivory"}`,
+		className: `min-h-8 rounded-md px-1.5 py-0.5 text-sm disabled:opacity-40 ${hot === "red" ? "bg-crimson text-ivory" : hot === "black" ? "border border-line bg-ink text-ivory" : "bg-felt text-ivory"}`,
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 			className: "block",
 			children: tx(label)

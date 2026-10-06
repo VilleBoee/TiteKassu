@@ -318,7 +318,7 @@ export function PokerGame() {
   return (
     <Console pid="04" unit="table.holdem" title={t("gamePoker")} blurb={t("roomPoker")} live={Boolean(live)}>
       <p className="mb-3 font-mono text-xs text-term-muted">{t("blinds", { sb: SB, bb: BB })}</p>
-      <div className="felt-surface rounded-md border border-term-line px-3 py-4 sm:px-5">
+      <div className="felt-surface rounded-md border border-term-line px-3 py-2 sm:px-4">
         <div className="grid grid-cols-3 gap-2">{[2, 3, 4].map((index) => renderSeat(index))}</div>
         <div className="mt-2 grid grid-cols-2 gap-2">
           {renderSeat(1)}
@@ -336,7 +336,7 @@ export function PokerGame() {
             )}
           </div>
         </div>
-        <div className="mt-4 border-t border-ivory/15 pt-4">{renderSeat(0, true)}</div>
+        <div className="mt-2 border-t border-ivory/15 pt-2">{renderSeat(0, true)}</div>
         {holding ? (
           <div className="mt-3 text-center">
             <p className="text-sm text-phosphor">{holding}</p>
@@ -502,11 +502,11 @@ function SeatSpot({
       {cards.length > 0 ? (
         <div className={`relative flex justify-center gap-1 ${folded ? "opacity-45" : ""}`} aria-label={cardsLabel}>
           {cards.map((card, index) => (
-            <PlayingCard key={`${card.r}${card.s}${index}`} card={showFaces ? card : undefined} down={!showFaces} small={!hero} />
+            <PlayingCard key={`${card.r}${card.s}${index}`} card={showFaces ? card : undefined} down={!showFaces} small />
           ))}
         </div>
       ) : null}
-      <p className={`mt-1 truncate font-display leading-none text-ivory ${hero ? "text-3xl" : "text-xl"}`}>
+      <p className={`mt-1 truncate font-display leading-none text-ivory ${hero ? "text-2xl" : "text-lg"}`}>
         {name}
         {button ? (
           <span

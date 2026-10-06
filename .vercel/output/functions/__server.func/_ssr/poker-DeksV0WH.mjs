@@ -1,8 +1,8 @@
 import { i as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
-import { S as useI18n, _ as pokerRank, a as GhostButton, b as shuffle, d as RuleNote, g as playCue, h as makeDeck, l as PlayingCard, n as BrokeRack, o as GoldButton, r as Console, s as HouseShell, u as ResultLine, v as randInt, x as useHouse, y as rankWord } from "./shell-BLRQpTWr.mjs";
+import { S as useI18n, _ as pokerRank, a as GhostButton, b as shuffle, d as RuleNote, g as playCue, h as makeDeck, l as PlayingCard, n as BrokeRack, o as GoldButton, r as Console, s as HouseShell, u as ResultLine, v as randInt, x as useHouse, y as rankWord } from "./shell-WYw15Y_j.mjs";
 import { t as useReducedMotion } from "./use-reduced-motion-CCumc2IX.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/poker-ofMfmn_M.js
+//#region node_modules/.nitro/vite/services/ssr/assets/poker-DeksV0WH.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function zeros(n = 6) {
@@ -909,7 +909,7 @@ function PokerGame() {
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "felt-surface rounded-md border border-term-line px-3 py-4 sm:px-5",
+				className: "felt-surface rounded-md border border-term-line px-3 py-2 sm:px-4",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "grid grid-cols-3 gap-2",
@@ -947,7 +947,7 @@ function PokerGame() {
 						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "mt-4 border-t border-ivory/15 pt-4",
+						className: "mt-2 border-t border-ivory/15 pt-2",
 						children: renderSeat(0, true)
 					}),
 					holding ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -1127,11 +1127,11 @@ function SeatSpot({ name, stack, button, buttonLabel, acting, actingLabel, folde
 				children: cards.map((card, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlayingCard, {
 					card: showFaces ? card : void 0,
 					down: !showFaces,
-					small: !hero
+					small: true
 				}, `${card.r}${card.s}${index}`))
 			}) : null,
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-				className: `mt-1 truncate font-display leading-none text-ivory ${hero ? "text-3xl" : "text-xl"}`,
+				className: `mt-1 truncate font-display leading-none text-ivory ${hero ? "text-2xl" : "text-lg"}`,
 				children: [name, button ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 					className: "ml-1 inline-flex size-5 items-center justify-center rounded-full bg-phosphor align-middle font-mono text-[10px] font-semibold text-phosphor-ink",
 					title: buttonLabel,

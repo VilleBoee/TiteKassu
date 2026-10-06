@@ -195,8 +195,8 @@ export function GhostButton({
 export function RuleNote({ title, children }: { title: string; children: ReactNode }) {
   const { tx } = useI18n();
   return (
-    <details className="mt-6 border-t border-term-line pt-4">
-      <summary className="min-h-11 cursor-pointer list-none font-mono text-xs tracking-wide text-phosphor uppercase">{tx(title)}</summary>
+    <details className="mt-3 border-t border-term-line pt-2">
+      <summary className="min-h-9 cursor-pointer list-none font-mono text-xs tracking-wide text-phosphor uppercase">{tx(title)}</summary>
       <div className="mt-3 space-y-2 text-sm leading-relaxed text-term-muted">{children}</div>
     </details>
   );
@@ -206,7 +206,7 @@ export function ResultLine({ text, tone }: { text: string; tone: "win" | "push" 
   const { tx } = useI18n();
   const color = tone === "win" ? "text-phosphor" : tone === "lose" ? "text-alert" : "text-term-fg";
   return (
-    <p className={`flex items-baseline gap-3 rounded-md border border-term-line bg-term-elev px-4 py-3 font-mono text-sm leading-relaxed ${color}`} aria-live="polite">
+    <p className={`flex items-baseline gap-3 rounded-md border border-term-line bg-term-elev px-3 py-2 font-mono text-sm leading-snug ${color}`} aria-live="polite">
       <span className="text-term-muted" aria-hidden>
         {">"}
       </span>
@@ -239,9 +239,9 @@ export function Console({
         <span className="ml-auto font-mono text-xs text-term-muted">{live ? "run" : "ready"}</span>
       </div>
       <div className="term-body">
-        <h1 className="font-display text-4xl leading-none text-term-fg sm:text-5xl">{title}</h1>
-        <p className="mt-3 max-w-prose text-sm leading-relaxed text-term-muted">{blurb}</p>
-        <div className="mt-6">{children}</div>
+        <h1 className="font-display text-3xl leading-none text-term-fg">{title}</h1>
+        <p className="mt-1 max-w-prose text-sm leading-snug text-term-muted">{blurb}</p>
+        <div className="mt-3">{children}</div>
       </div>
     </section>
   );

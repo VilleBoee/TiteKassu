@@ -435,7 +435,7 @@ function Outside({
   const { tx, fmt } = useI18n();
   const tone = hot === "red" ? "bg-crimson text-ivory" : hot === "black" ? "border border-line bg-ink text-ivory" : "bg-felt text-ivory";
   return (
-    <button type="button" disabled={spinning} onClick={() => onAdd(bet)} className={`min-h-11 rounded-md px-2 py-1 text-sm disabled:opacity-40 ${tone}`}>
+    <button type="button" disabled={spinning} onClick={() => onAdd(bet)} className={`min-h-8 rounded-md px-1.5 py-0.5 text-sm disabled:opacity-40 ${tone}`}>
       <span className="block">{tx(label)}</span>
       {amount > 0 ? <span className="num block text-ivory">{fmt(amount)}</span> : null}
     </button>

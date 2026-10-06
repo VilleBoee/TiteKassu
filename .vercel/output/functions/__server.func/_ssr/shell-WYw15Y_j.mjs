@@ -2,7 +2,7 @@ import { i as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime, b as Link, p as useRouterState } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as Spade, c as Heart, f as Club, i as Sun, n as Volume2, o as ScrollText, s as Moon, t as VolumeX, u as Diamond } from "../_libs/lucide-react.mjs";
 import { t as create } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/shell-BLRQpTWr.js
+//#region node_modules/.nitro/vite/services/ssr/assets/shell-WYw15Y_j.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var ctx = null;
@@ -1199,9 +1199,9 @@ function GhostButton({ className = "", cabinet = false, children, ...props }) {
 function RuleNote({ title, children }) {
 	const { tx } = useI18n();
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("details", {
-		className: "mt-6 border-t border-term-line pt-4",
+		className: "mt-3 border-t border-term-line pt-2",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("summary", {
-			className: "min-h-11 cursor-pointer list-none font-mono text-xs tracking-wide text-phosphor uppercase",
+			className: "min-h-9 cursor-pointer list-none font-mono text-xs tracking-wide text-phosphor uppercase",
 			children: tx(title)
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "mt-3 space-y-2 text-sm leading-relaxed text-term-muted",
@@ -1212,7 +1212,7 @@ function RuleNote({ title, children }) {
 function ResultLine({ text, tone }) {
 	const { tx } = useI18n();
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-		className: `flex items-baseline gap-3 rounded-md border border-term-line bg-term-elev px-4 py-3 font-mono text-sm leading-relaxed ${tone === "win" ? "text-phosphor" : tone === "lose" ? "text-alert" : "text-term-fg"}`,
+		className: `flex items-baseline gap-3 rounded-md border border-term-line bg-term-elev px-3 py-2 font-mono text-sm leading-snug ${tone === "win" ? "text-phosphor" : tone === "lose" ? "text-alert" : "text-term-fg"}`,
 		"aria-live": "polite",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 			className: "text-term-muted",
@@ -1248,22 +1248,22 @@ function Console({ pid, unit, title, blurb, live = false, children }) {
 			className: "term-body",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-					className: "font-display text-4xl leading-none text-term-fg sm:text-5xl",
+					className: "font-display text-3xl leading-none text-term-fg",
 					children: title
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "mt-3 max-w-prose text-sm leading-relaxed text-term-muted",
+					className: "mt-1 max-w-prose text-sm leading-snug text-term-muted",
 					children: blurb
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "mt-6",
+					className: "mt-3",
 					children
 				})
 			]
 		})]
 	});
 }
-var VERSION = "0.1.4";
+var VERSION = "v0.1.5";
 var NAV = [
 	{
 		to: "/slots",
@@ -1325,89 +1325,93 @@ function HouseShell({ children, wide = false }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "min-h-dvh bg-bg text-fg",
 		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
 				className: "border-b border-stroke",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-baseline gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-							to: "/",
-							className: "font-display text-2xl leading-none tracking-wide text-fg",
-							children: "TiteKassu"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "font-mono text-xs tracking-wide text-muted",
-							children: VERSION
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex flex-wrap items-center justify-end gap-2",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-								className: "num rounded-full border border-stroke bg-surface px-3 py-2 text-sm text-accent",
-								"aria-live": "polite",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "sr-only",
-									children: [t("chips"), " "]
-								}), hydrated ? fmt(chips) : fmt(BUY_IN)]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "inline-flex h-11 overflow-hidden rounded-full border border-stroke",
-								role: "group",
-								"aria-label": t("lang"),
-								children: ["fi", "en"].map((code) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									type: "button",
-									"aria-pressed": locale === code,
-									className: `min-w-11 px-3 text-xs font-semibold tracking-wide ${locale === code ? "bg-accent text-accent-ink" : "text-muted"}`,
-									onClick: () => setLocale(code),
-									children: code === "fi" ? "FI" : "EN"
-								}, code))
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								type: "button",
-								className: "inline-flex size-11 items-center justify-center rounded-full border border-stroke text-fg",
-								"aria-pressed": theme === "light",
-								"aria-label": theme === "light" ? t("themeDark") : t("themeLight"),
-								onClick: toggleTheme,
-								children: theme === "light" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Moon, { className: "size-4" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sun, { className: "size-4" })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								type: "button",
-								className: "inline-flex size-11 items-center justify-center rounded-full border border-stroke text-fg",
-								"aria-pressed": !sound,
-								"aria-label": sound ? t("mute") : t("unmute"),
-								onClick: () => {
-									unlockAudio();
-									toggleSound();
-									if (!sound) playCue("tick");
-								},
-								children: sound ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "size-4" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "size-4" })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								type: "button",
-								className: "inline-flex size-11 items-center justify-center rounded-full border border-stroke text-fg",
-								"aria-expanded": ledger,
-								"aria-label": t("openLedger"),
-								onClick: () => setLedger(true),
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollText, { className: "size-4" })
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2 lg:flex-nowrap",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-baseline gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								to: "/",
+								className: "font-display text-2xl leading-none tracking-wide text-fg",
+								children: "TiteKassu"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "font-mono text-xs tracking-wide text-muted",
+								children: VERSION
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
+							className: "order-last flex w-full gap-1.5 overflow-x-auto lg:order-none lg:w-auto lg:flex-1",
+							"aria-label": t("tables"),
+							children: NAV.map((item) => {
+								const on = path === item.to;
+								return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+									to: item.to,
+									className: `inline-flex min-h-9 shrink-0 items-center rounded-full px-3 text-sm ${on ? "bg-accent text-accent-ink" : "border border-stroke text-muted"}`,
+									"aria-current": on ? "page" : void 0,
+									children: t(item.key)
+								}, item.to);
 							})
-						]
-					})]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
-					className: "mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 pb-3",
-					"aria-label": t("tables"),
-					children: NAV.map((item) => {
-						const on = path === item.to;
-						return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-							to: item.to,
-							className: `inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-sm ${on ? "bg-accent text-accent-ink" : "border border-stroke text-muted"}`,
-							"aria-current": on ? "page" : void 0,
-							children: t(item.key)
-						}, item.to);
-					})
-				})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "ml-auto flex items-center gap-1.5",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+									className: "num rounded-full border border-stroke bg-surface px-3 py-1.5 text-sm text-accent",
+									"aria-live": "polite",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "sr-only",
+										children: [t("chips"), " "]
+									}), hydrated ? fmt(chips) : fmt(BUY_IN)]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "inline-flex h-9 overflow-hidden rounded-full border border-stroke",
+									role: "group",
+									"aria-label": t("lang"),
+									children: ["fi", "en"].map((code) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										type: "button",
+										"aria-pressed": locale === code,
+										className: `min-w-9 px-2.5 text-xs font-semibold tracking-wide ${locale === code ? "bg-accent text-accent-ink" : "text-muted"}`,
+										onClick: () => setLocale(code),
+										children: code === "fi" ? "FI" : "EN"
+									}, code))
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									className: "inline-flex size-9 items-center justify-center rounded-full border border-stroke text-fg",
+									"aria-pressed": theme === "light",
+									"aria-label": theme === "light" ? t("themeDark") : t("themeLight"),
+									onClick: toggleTheme,
+									children: theme === "light" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Moon, { className: "size-4" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sun, { className: "size-4" })
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									className: "inline-flex size-9 items-center justify-center rounded-full border border-stroke text-fg",
+									"aria-pressed": !sound,
+									"aria-label": sound ? t("mute") : t("unmute"),
+									onClick: () => {
+										unlockAudio();
+										toggleSound();
+										if (!sound) playCue("tick");
+									},
+									children: sound ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "size-4" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "size-4" })
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									className: "inline-flex size-9 items-center justify-center rounded-full border border-stroke text-fg",
+									"aria-expanded": ledger,
+									"aria-label": t("openLedger"),
+									onClick: () => setLedger(true),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollText, { className: "size-4" })
+								})
+							]
+						})
+					]
+				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
-				className: `mx-auto px-4 py-6 ${wide ? "max-w-6xl" : "max-w-3xl"}`,
+				className: `mx-auto px-4 py-3 ${wide ? "max-w-6xl" : "max-w-3xl"}`,
 				children
 			}),
 			ledger ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ledger, { onClose: () => setLedger(false) }) : null

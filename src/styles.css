@@ -110,6 +110,12 @@
       height: 4.25rem;
     }
   }
+  @media (max-height: 980px) {
+    .pcard:not(.pcard-sm) {
+      width: 3.4rem;
+      height: 4.75rem;
+    }
+  }
   @media (max-width: 420px) {
     .pcard:not(.pcard-sm) {
       width: 3.7rem;
@@ -123,12 +129,21 @@
   .card-in {
     animation: card-in 320ms cubic-bezier(0.16, 0.84, 0.32, 1);
   }
+  .sf-fit {
+    width: min(100%, max(15rem, calc(100dvh - 32.5rem)));
+    margin-inline: auto;
+  }
   .sf-cell {
+    container-type: size;
     transition:
       background-color 360ms ease,
       border-color 360ms ease,
       box-shadow 360ms ease,
       opacity 320ms ease;
+  }
+  .sf-glyph {
+    font-size: clamp(1rem, 46cqmin, 1.7rem);
+    line-height: 1;
   }
   .sf-fall {
     animation: sf-fall 420ms cubic-bezier(0.16, 0.84, 0.32, 1) both;
@@ -215,7 +230,7 @@
     animation: term-pulse 1.4s ease-in-out infinite;
   }
   .term-body {
-    padding: 1.25rem;
+    padding: 0.75rem 1rem 0.85rem;
   }
   .term-stage {
     border: 1px solid var(--color-term-line);

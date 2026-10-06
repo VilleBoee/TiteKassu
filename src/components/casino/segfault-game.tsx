@@ -47,7 +47,7 @@ const GLYPH: Record<Sym, string> = {
 
 function Glyph({ sym }: { sym: Sym }) {
   return (
-    <span className={`leading-none select-none ${sym === "nop" ? "text-lg text-ivory/35" : "text-3xl"}`} role="img" aria-label={sym}>
+    <span className={`sf-glyph leading-none select-none ${sym === "nop" ? "text-ivory/35" : ""}`} role="img" aria-label={sym}>
       {GLYPH[sym]}
     </span>
   );
@@ -226,7 +226,7 @@ export function SegfaultGame() {
 
   return (
     <Console pid="05" unit="rack.segfault" title={t("gameSegfault")} blurb={t("sfIntro")} live={running || autoOn}>
-      <div className="term-stage relative overflow-hidden p-3">
+      <div className="term-stage sf-fit relative overflow-hidden p-2">
         {veil ? <div key={cursor} className={`sf-veil ${veil}`} aria-hidden /> : null}
         <div className="relative mb-3 flex flex-wrap items-center justify-between gap-2 font-mono text-xs tracking-wide text-term-muted uppercase">
           <span>{t("sfRows", { n: frame?.open ?? 3 })}</span>
@@ -282,10 +282,10 @@ export function SegfaultGame() {
           </p>
         ) : null}
       </div>
-      <div className="mt-5">
+      <div className="mt-3">
         <ResultLine text={line} tone={toneName} />
       </div>
-      <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
+      <div className="mt-3 flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="mb-2 font-mono text-xs tracking-wide text-term-muted uppercase">{t("betSize")}</p>
           <DenomPicker value={bet} onChange={setBet} denoms={BETS} disabled={running || autoOn} label="Bet size" />
